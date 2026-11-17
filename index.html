@@ -122,6 +122,15 @@
           </div>
         </div>
 
+        <!-- 监测项实时状态矩阵 -->
+        <div class="monitor-items-section">
+          <div class="monitor-items-header">
+            <span class="monitor-items-title">监测项实时状态矩阵</span>
+            <span class="badge badge-primary">实时在线</span>
+          </div>
+          <div id="monitor-items-grid" class="monitor-items-grid"></div>
+        </div>
+
         <!-- 左侧面板：环境气象与结构荷载感知 -->
         <div class="dash-left-col">
           <!-- 微气象三维风场感知卡 -->
@@ -466,6 +475,101 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+        <!-- 六大子系统六宫格 -->
+        <div class="six-subsystems-grid">
+          <div class="subsystem-card">
+            <span class="subsystem-num">01</span>
+            <div>
+              <h4>自动化感知</h4>
+              <p>多类型工业级传感器同步高精度采集结构信号。</p>
+            </div>
+          </div>
+          <div class="subsystem-card">
+            <span class="subsystem-num">02</span>
+            <div>
+              <h4>数据采集与传输</h4>
+              <p>边缘预处理、断网续传、多链路安全回传上云。</p>
+            </div>
+          </div>
+          <div class="subsystem-card">
+            <span class="subsystem-num">03</span>
+            <div>
+              <h4>数据存储与管理</h4>
+              <p>数据清洗、同步与时序存储，建立全寿命档案。</p>
+            </div>
+          </div>
+          <div class="subsystem-card">
+            <span class="subsystem-num">04</span>
+            <div>
+              <h4>数据处理与分析</h4>
+              <p>特征提取、趋势分析与结构异常特征识别。</p>
+            </div>
+          </div>
+          <div class="subsystem-card">
+            <span class="subsystem-num">05</span>
+            <div>
+              <h4>安全预警与评估</h4>
+              <p>多级阈值判级、规则研判与结构健康度评估。</p>
+            </div>
+          </div>
+          <div class="subsystem-card">
+            <span class="subsystem-num">06</span>
+            <div>
+              <h4>可视化集成</h4>
+              <p>BIM+GIS 数字孪生一张图与 Web / APP 双端服务。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 监测内容分类 -->
+      <section>
+        <div class="section-heading-box">
+          <span class="section-pre-title">Monitoring Scope</span>
+          <h2 class="section-main-title">监测内容：环境—作用—响应全覆盖</h2>
+          <p class="section-desc">依据 JT/T 1037-2022，监测内容覆盖环境、作用与结构响应三大类，典型配置如下。</p>
+        </div>
+
+        <div class="monitor-scope-layout">
+          <table class="monitor-scope-table">
+            <thead>
+              <tr>
+                <th>监测类别</th>
+                <th>监测项</th>
+                <th>典型设备</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>环境与作用</td>
+                <td>温湿度、风速风向、地震动、车辆荷载</td>
+                <td>气象站、三向加速度计、称重设备</td>
+              </tr>
+              <tr>
+                <td>结构变形</td>
+                <td>挠度 / 沉降、桥塔 / 梁体位移、支座位移、倾斜</td>
+                <td>静力水准仪、GNSS、拉线位移计、倾角仪</td>
+              </tr>
+              <tr>
+                <td>结构受力与振动</td>
+                <td>应变、索力、主梁与拉索振动</td>
+                <td>光纤光栅应变计、加速度计、磁通量传感器</td>
+              </tr>
+              <tr>
+                <td>表观与视频</td>
+                <td>裂缝、锈蚀、异常事件、车牌</td>
+                <td>AI 高清视频监控</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <figure class="arch-image-card" style="text-align:center; margin:0;">
+            <img src="assets/img/sensor_layout_3d.jpeg" alt="图3 大桥监测测点布设三维示意" />
+            <figcaption style="font-size:11px; color:var(--text-secondary); margin-top:8px;">图3 大桥监测测点布设三维示意（多类型传感器协同布设）</figcaption>
+          </figure>
         </div>
       </section>
 

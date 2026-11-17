@@ -73,6 +73,7 @@ class AppController {
     window.dashboard.currentProjectId = bridgeId;
     window.dashboard.renderBridgeSvg();
     window.dashboard.renderSensorPills();
+    window.dashboard.renderMonitorItems();
 
     const project = window.SystemMockData.projects.find(p => p.id === bridgeId);
     const cables = (project && project.cables) ? project.cables : [];

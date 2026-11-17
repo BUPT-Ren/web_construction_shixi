@@ -17,6 +17,7 @@ class DashboardController {
     this.bindEvents();
     this.renderBridgeSvg();
     this.renderSensorPills();
+    this.renderMonitorItems();
     this.startRealtimeStream();
   }
 
@@ -257,6 +258,27 @@ class DashboardController {
         <span class="point-status-dot ${kp.status}"></span>
         <span>${kp.name}:</span>
         <strong style="color:var(--color-primary); font-family:monospace;">${kp.val} ${kp.unit}</strong>
+      </div>
+    `).join('');
+  }
+
+  renderMonitorItems() {
+    const container = document.getElementById('monitor-items-grid');
+    if (!container) return;
+    const project = window.SystemMockData.projects.find(p => p.id === this.currentProjectId);
+    let items = [];
+    if (project) {
+      if (project.monitoringItems && project.monitoringItems.length) {
+        items = project.monitoringItems;
+      } else if (project.keyPoints) {
+        items = project.keyPoints.map(kp => ({ name: kp.name, value: kp.val, unit: kp.unit, status: kp.status }));
+      }
+    }
+    container.innerHTML = items.map(it => `
+      <div class="monitor-item-tile" title="${it.name}">
+        <span class="monitor-item-dot ${it.status || 'normal'}"></span>
+        <span class="monitor-item-name">${it.name}</span>
+        <span class="monitor-item-value">${it.value}<span class="unit">${it.unit || ''}</span></span>
       </div>
     `).join('');
   }

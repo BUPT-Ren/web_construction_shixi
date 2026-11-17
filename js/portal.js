@@ -106,7 +106,9 @@ class PortalController {
     container.innerHTML = projects.map(p => `
       <div class="case-card-big">
         <div class="case-card-hero-img">
-          <img src="${p.image}" alt="${p.name}" />
+          ${p.image
+            ? `<img src="${p.image}" alt="${p.name}" />`
+            : `<div class="case-img-placeholder"><span>${p.type}</span><small>工程实景待补充</small></div>`}
           <div class="case-card-type-badge">${p.type}</div>
         </div>
         <div class="case-card-details">

@@ -485,3 +485,97 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* 六大子系统六宫格 */
+.six-subsystems-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.subsystem-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: var(--shadow-card);
+}
+
+.subsystem-num {
+  font-family: var(--font-mono);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.subsystem-card h4 {
+  font-size: 14px;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.subsystem-card p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 监测内容分类 */
+.monitor-scope-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 34px;
+}
+
+.monitor-scope-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 13px;
+  box-shadow: var(--shadow-card);
+}
+
+.monitor-scope-table th {
+  background: #f1f4f8;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.monitor-scope-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid #f0f2f5;
+  color: var(--text-main);
+}
+
+.monitor-scope-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 900px) {
+  .six-subsystems-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .monitor-scope-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .six-subsystems-grid {
+    grid-template-columns: 1fr;
+  }
+}

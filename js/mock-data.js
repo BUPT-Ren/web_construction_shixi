@@ -78,6 +78,20 @@ window.SystemMockData = {
         { id: "LS-33", design: 600, actual: 598 },
         { id: "LS-34", design: 305, actual: 303 },
         { id: "LS-35", design: 305, actual: 304 }
+      ],
+      // 监测项实时状态矩阵（对标目标界面，巨力大桥典型 11 类监测项）
+      monitoringItems: [
+        { name: "风速风向", value: "3.4", unit: "m/s", status: "normal" },
+        { name: "梁端纵向位移", value: "18.6", unit: "mm", status: "normal" },
+        { name: "主梁振动", value: "0.045", unit: "m/s²", status: "normal" },
+        { name: "索力", value: "808.2", unit: "kN", status: "normal" },
+        { name: "主梁挠度", value: "-12.4", unit: "mm", status: "normal" },
+        { name: "支座位移", value: "6.2", unit: "mm", status: "normal" },
+        { name: "梁端转角", value: "0.012", unit: "°", status: "normal" },
+        { name: "吊杆振动", value: "0.021", unit: "m/s²", status: "normal" },
+        { name: "塔顶转角", value: "0.008", unit: "°", status: "normal" },
+        { name: "地震动", value: "0.012", unit: "m/s²", status: "normal" },
+        { name: "塔顶偏位", value: "1.8", unit: "mm", status: "normal" }
       ]
     },
     {
@@ -119,7 +133,7 @@ window.SystemMockData = {
       type: "超高层地标框架-核心筒",
       location: "河北省邢台市",
       span: "高 180m 框架-核心筒结构",
-      image: "assets/img/spsd_damage_result.jpeg",
+      image: "",
       status: "长期健康监测",
       healthScore: 95.1,
       healthLevel: "A级 (稳定)",
@@ -135,7 +149,7 @@ window.SystemMockData = {
       type: "梁式 / 预应力连续梁桥群",
       location: "河北省唐县 (跨南水北调中线)",
       span: "城西桥、军营桥、唐县北桥、向阳大桥",
-      image: "assets/img/sensor_layout_3d.jpeg",
+      image: "",
       status: "桥群联网集约化监控",
       healthScore: 93.4,
       healthLevel: "A级 (正常)",
@@ -212,6 +226,30 @@ window.SystemMockData = {
       accuracy: "相对误差 < 2% FS",
       image: "",
       tag: "受力与振动"
+    },
+    {
+      name: "拉线位移传感器",
+      target: "支座位移 / 梁端纵向位移",
+      principle: "绳索带动编码器线性输出，恒张力自动回旋排线；密封性好、温度误差小、使用寿命长，适用于支座与梁端长期位移监测",
+      accuracy: "±0.1 mm / 量程可定制",
+      image: "",
+      tag: "结构变形"
+    },
+    {
+      name: "倾角仪",
+      target: "桥塔 / 梁端倾角",
+      principle: "MEMS 双轴硅微电容 + ASIC 集成电路，测量重力加速度分量反算倾角；精度高、数据稳定，适合塔顶与梁端长期倾斜监测",
+      accuracy: "±0.01° / 双轴测量",
+      image: "",
+      tag: "结构变形"
+    },
+    {
+      name: "三向加速度计",
+      target: "承台顶 / 桥墩底部地震动",
+      principle: "三向同步拾取结构地震动加速度，服务于抗震设防与结构动力响应分析；动态范围大、抗冲击过载能力强",
+      accuracy: "频响 0.1~200 Hz / 三向同步",
+      image: "",
+      tag: "环境与作用"
     }
   ],
 
@@ -223,7 +261,7 @@ window.SystemMockData = {
       type: "国际顶级力学 SCI 一区",
       tags: ["SPSD理论", "有限元修正", "实测模态"],
       summary: "突破传统模态参数识别对稀疏测点和弱环境激励的敏感性，直接基于加速度功率谱密度对结构物理刚度矩阵的灵敏度展开迭代反演，成功应用于保定巨力大桥实测模态修正。",
-      image: "assets/img/juli_fem_model.jpeg"
+      image: "assets/img/spsd_damage_result.jpeg"
     },
     {
       title: "移动荷载激励下 CEEMD-PSD 灵敏度损伤精准定位",
