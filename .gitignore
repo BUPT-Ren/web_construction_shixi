@@ -11,3 +11,6 @@ Desktop.ini
 # 日志与缓存
 *.log
 .cache/
+
+# 本地代理执行规则（不上传到远程仓库）
+AGENTS.md
