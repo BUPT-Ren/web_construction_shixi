@@ -356,7 +356,7 @@ class DashboardController {
       <div class="alert-event-desc">
         跨中静力水准仪瞬时挠度达 <strong>-14.8 mm</strong>，超出安全阈值(-14.0 mm)！已触发联动警报并自动生成闭环工单！
       </div>
-      <span class="alert-action-link" onclick="window.app.switchTab('workorder')">👉 立即前往工单流转处置审批</span>
+      <span class="alert-action-link" onclick="window.app.switchTab('alarm')">👉 立即前往工单流转处置审批</span>
     `;
 
     alertList.prepend(newAlert);

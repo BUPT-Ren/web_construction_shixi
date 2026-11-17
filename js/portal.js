@@ -7,6 +7,8 @@ class PortalController {
     this.renderSensorsGrid();
     this.renderResearchPapers();
     this.renderCasesList();
+    this.renderRealtimeMonitorTable();
+    this.renderProjectsTable();
   }
 
   // 渲染传感器设备矩阵
@@ -123,6 +125,37 @@ class PortalController {
           </div>
         </div>
       </div>
+    `).join('');
+  }
+
+  // 渲染实时监测数据表（监测项实时数据）
+  renderRealtimeMonitorTable() {
+    const tbody = document.getElementById('realtime-monitor-body');
+    if (!tbody) return;
+    const juli = window.SystemMockData.projects.find(p => p.id === 'juli');
+    const items = (juli && juli.monitoringItems) ? juli.monitoringItems : [];
+    tbody.innerHTML = items.map(it => `
+      <tr>
+        <td>${it.name}</td>
+        <td style="font-family:monospace; font-weight:600; color:var(--text-main);">${it.value}</td>
+        <td>${it.unit}</td>
+        <td><span class="badge badge-success">● 正常</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // 渲染项目管理表格
+  renderProjectsTable() {
+    const tbody = document.getElementById('projects-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = window.SystemMockData.projects.map(p => `
+      <tr>
+        <td><strong>${p.name}</strong></td>
+        <td>${p.type}</td>
+        <td>${p.location} · ${p.span}</td>
+        <td><span class="badge badge-success">${p.status}</span></td>
+        <td style="font-family:monospace; font-weight:600; color:var(--color-primary);">${p.healthScore} 分</td>
+      </tr>
     `).join('');
   }
 }

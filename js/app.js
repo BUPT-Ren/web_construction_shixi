@@ -95,19 +95,17 @@ class AppController {
     btns.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetTab = btn.getAttribute('data-tab');
-        const anchor = btn.getAttribute('data-anchor');
-        this.switchTab(targetTab, anchor);
+        this.switchTab(targetTab);
       });
     });
   }
 
-  switchTab(tabId, anchor) {
+  switchTab(tabId) {
     this.currentTab = tabId;
 
-    // 更新按钮高亮（仅无锚点的“主入口”按钮高亮，锚点项是快捷跳转）
+    // 更新按钮高亮
     document.querySelectorAll('.nav-tab-btn').forEach(btn => {
-      const isPrimary = !btn.hasAttribute('data-anchor');
-      if (isPrimary && btn.getAttribute('data-tab') === tabId) {
+      if (btn.getAttribute('data-tab') === tabId) {
         btn.classList.add('active');
       } else {
         btn.classList.remove('active');
@@ -129,21 +127,13 @@ class AppController {
         window.dashboard.deflectionChart && window.dashboard.deflectionChart.render();
         window.dashboard.vibrationChart && window.dashboard.vibrationChart.render();
         window.dashboard.cableChart && window.dashboard.cableChart.render();
-      } else if (tabId === 'workorder' && window.workorder) {
+      } else if (tabId === 'assessment' && window.workorder) {
         window.workorder.radarChart && window.workorder.radarChart.render();
         window.workorder.gaugeChart && window.workorder.gaugeChart.render();
       }
     }, 50);
 
-    if (anchor) {
-      // 等待面板显示并完成布局后再滚动定位，避免与回到顶部发生冲突
-      setTimeout(() => {
-        const el = document.getElementById(anchor);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 180);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // 通用模态框
