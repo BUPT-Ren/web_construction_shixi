@@ -95,7 +95,6 @@ python -m http.server 8080
 demo/
 ├── index.html                   # 主应用入口单页（集成四大业务板块）
 ├── README.md                    # 本演示与项目说明文档
-├── 智能监测系统介绍1027.pdf      # 原始工程规范与系统介绍文档 (2MB)
 ├── css/
 │   ├── base.css                 # 全局基础样式、工业科技蓝色彩规范、按钮、模态框
 │   ├── dashboard.css            # 数字孪生大屏样式（三栏网格、SVG桥梁、波形卡片）
