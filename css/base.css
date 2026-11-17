@@ -50,9 +50,12 @@ body {
   font-family: var(--font-family);
   background-color: var(--bg-primary);
   background-image:
-    linear-gradient(rgba(31, 111, 235, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(31, 111, 235, 0.025) 1px, transparent 1px);
-  background-size: 32px 32px, 32px 32px;
+    linear-gradient(rgba(238, 241, 245, 0.82), rgba(238, 241, 245, 0.86)),
+    url("../assets/img/background_sea_bridge.jpg");
+  background-size: auto, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed;
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
