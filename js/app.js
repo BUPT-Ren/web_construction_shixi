@@ -95,7 +95,14 @@ class AppController {
     btns.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetTab = btn.getAttribute('data-tab');
+        const anchor = btn.getAttribute('data-anchor');
         this.switchTab(targetTab);
+        if (anchor) {
+          setTimeout(() => {
+            const el = document.getElementById(anchor);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 150);
+        }
       });
     });
   }
@@ -103,9 +110,10 @@ class AppController {
   switchTab(tabId) {
     this.currentTab = tabId;
 
-    // 更新按钮高亮
+    // 更新按钮高亮（仅无锚点的“主入口”按钮高亮，锚点项是快捷跳转）
     document.querySelectorAll('.nav-tab-btn').forEach(btn => {
-      if (btn.getAttribute('data-tab') === tabId) {
+      const isPrimary = !btn.hasAttribute('data-anchor');
+      if (isPrimary && btn.getAttribute('data-tab') === tabId) {
         btn.classList.add('active');
       } else {
         btn.classList.remove('active');
