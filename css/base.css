@@ -328,6 +328,28 @@ body {
   flex-shrink: 0;
 }
 
+/* 侧边栏子级快捷入口（缩进、弱化显示，与主模块区分） */
+.nav-sub-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 17px;
+  margin: -2px 0 4px;
+  border-left: 1px solid var(--border-color);
+  margin-left: 19px;
+}
+
+.nav-sub-btn {
+  padding: 7px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.nav-sub-btn:hover {
+  color: var(--color-primary);
+  background: var(--color-primary-dim);
+}
+
 /* 主内容区域容器 */
 .app-container {
   flex: 1;
@@ -545,4 +567,15 @@ body {
 
 .btn-outline:hover {
   background: var(--color-primary-dim);
+}
+
+/* 锚点跳转时避开吸顶顶栏 */
+#monitor-items-section,
+#video-monitor,
+#data-security,
+#monitor-scope,
+#alarm-loop,
+#health-assessment,
+#cases-grid-layout {
+  scroll-margin-top: 80px;
 }

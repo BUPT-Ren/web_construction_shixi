@@ -96,18 +96,12 @@ class AppController {
       btn.addEventListener('click', () => {
         const targetTab = btn.getAttribute('data-tab');
         const anchor = btn.getAttribute('data-anchor');
-        this.switchTab(targetTab);
-        if (anchor) {
-          setTimeout(() => {
-            const el = document.getElementById(anchor);
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 150);
-        }
+        this.switchTab(targetTab, anchor);
       });
     });
   }
 
-  switchTab(tabId) {
+  switchTab(tabId, anchor) {
     this.currentTab = tabId;
 
     // 更新按钮高亮（仅无锚点的“主入口”按钮高亮，锚点项是快捷跳转）
@@ -141,7 +135,15 @@ class AppController {
       }
     }, 50);
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (anchor) {
+      // 等待面板显示并完成布局后再滚动定位，避免与回到顶部发生冲突
+      setTimeout(() => {
+        const el = document.getElementById(anchor);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 180);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   // 通用模态框
