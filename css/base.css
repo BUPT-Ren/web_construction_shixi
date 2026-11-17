@@ -118,6 +118,22 @@ body {
   fill: #fff;
 }
 
+/* 公司 Logo（白色底板，适配深色顶栏） */
+.brand-logo-wrap {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 6px 12px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand-logo-wrap img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
 .brand-title-box {
   display: flex;
   flex-direction: column;
