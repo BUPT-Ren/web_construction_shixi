@@ -1,0 +1,296 @@
+/* ==========================================================================
+   预警巡检与工单闭环管理系统 + 典型案例库样式 (workorder.css) —— 浅色后台风格
+   ========================================================================== */
+
+/* 设备在线网格卡片 */
+.device-monitor-summary-bar {
+  background: #f6f8fa;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.device-stats-counts {
+  display: flex;
+  gap: 28px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.device-stats-counts span strong {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--color-primary);
+  margin-left: 4px;
+}
+
+.device-grid-matrix {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 6px;
+  background: #fbfcfe;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 24px;
+}
+
+.device-grid-tag {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.device-grid-tag:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-dim);
+}
+
+.device-tag-code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.device-tag-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-success);
+}
+
+/* 预警处理闭环流程步骤指示条 */
+.closed-loop-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 18px 0 24px;
+  position: relative;
+}
+
+.closed-loop-steps::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 30px;
+  right: 30px;
+  height: 2px;
+  background: var(--border-color);
+  z-index: 1;
+}
+
+.step-node {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--border-color);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+.step-node.active .step-circle {
+  border-color: var(--color-primary);
+  color: #ffffff;
+  background: var(--color-primary);
+}
+
+.step-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.step-node.active .step-label {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* 工单列表表格 */
+.table-scroll-wrap {
+  overflow-x: auto;
+}
+
+.work-order-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.work-order-table th {
+  background: #f1f4f8;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.work-order-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f0f2f5;
+  color: var(--text-main);
+}
+
+.work-order-table tr:hover td {
+  background: #f7f9fc;
+}
+
+/* 结构健康度评估报告卡 */
+.health-assessment-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .health-assessment-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.health-radar-container {
+  height: 240px;
+  position: relative;
+}
+
+#chart-health-radar,
+#chart-health-gauge {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.health-summary-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 典型案例卡片库 */
+.cases-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1080px) {
+  .cases-grid-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.case-card-big {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+  box-shadow: var(--shadow-card);
+}
+
+.case-card-big:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 28px rgba(16, 24, 40, 0.1);
+  transform: translateY(-4px);
+}
+
+.case-card-hero-img {
+  width: 100%;
+  height: 220px;
+  background: #f1f4f8;
+  overflow: hidden;
+  position: relative;
+}
+
+.case-card-hero-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.case-card-big:hover .case-card-hero-img img {
+  transform: scale(1.05);
+}
+
+.case-card-type-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(31, 111, 235, 0.4);
+  color: var(--color-primary);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+}
+
+.case-card-details {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.case-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.case-card-location {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.case-card-highlights {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.case-data-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 10px;
+}

@@ -1,0 +1,13 @@
+# 操作系统与编辑器产生的临时文件
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+.vscode/
+.idea/
+*.swp
+*.tmp
+
+# 日志与缓存
+*.log
+.cache/

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工程结构智能监测与全寿命健康运维系统 | BIM+GIS 数字孪生平台</title>
+  
+  <!-- 样式层引入 -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/portal.css">
+  <link rel="stylesheet" href="css/workorder.css">
+</head>
+<body>
+
+  <!-- 全局顶部导航栏 -->
+  <header class="global-header">
+    <div class="brand-section">
+      <div class="brand-logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="brand-title-box">
+        <div class="brand-title">重大工程结构智能监测与全寿命健康运维系统</div>
+        <div class="brand-subtitle">
+          <span>“端—边—云”协同架构</span>
+          <span class="brand-tag">JT/T 1037-2022 标准合规</span>
+          <span class="brand-tag brand-tag-green">等保二级认证</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧工具栏 -->
+    <div class="header-actions">
+      <div class="bridge-selector-wrap">
+        <label>监测对象:</label>
+        <select id="global-bridge-select" class="bridge-select"></select>
+      </div>
+
+      <button class="btn-trigger-alert" onclick="window.dashboard.triggerDemoAlert()" title="触发一次真实的多级报警联动演示">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        模拟突发预警
+      </button>
+
+      <div id="global-clock" class="header-clock">2026-11-16 17:00:00</div>
+
+      <button class="btn-outline" style="padding:6px 10px;" onclick="window.app.toggleFullScreen()" title="全屏演示模式">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- 主体工作区：左侧导航 + 内容区 -->
+  <div class="app-shell">
+    <aside class="app-sidebar">
+      <div class="sidebar-caption">功能导航</div>
+      <nav class="app-nav">
+        <button class="nav-tab-btn active" data-tab="dashboard">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          数字孪生大屏
+        </button>
+        <button class="nav-tab-btn" data-tab="portal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          方案与架构介绍
+        </button>
+        <button class="nav-tab-btn" data-tab="workorder">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          预警与巡检工单
+        </button>
+        <button class="nav-tab-btn" data-tab="cases">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          典型工程案例
+        </button>
+      </nav>
+    </aside>
+
+    <main class="app-container">
+
+    <!-- ========================================================================= -->
+    <!-- 模块一：BIM+GIS 数字孪生智能监测大屏 (核心亮点)                          -->
+    <!-- ========================================================================= -->
+    <div id="tab-dashboard" class="tab-pane active">
+      <div class="dashboard-grid">
+        
+        <!-- 顶部态势关键指标 Banner -->
+        <div class="kpi-banner">
+          <div class="kpi-card">
+            <div>
+              <div class="kpi-info-label">接入在役监测结构</div>
+              <div class="kpi-info-val">5 <span>座重大工程</span></div>
+            </div>
+            <div class="kpi-icon-wrap">🌉</div>
+          </div>
+          <div class="kpi-card">
+            <div>
+              <div class="kpi-info-label">工业级传感测点总数</div>
+              <div class="kpi-info-val">223 <span>个测点</span></div>
+            </div>
+            <div class="kpi-icon-wrap">📡</div>
+          </div>
+          <div class="kpi-card">
+            <div>
+              <div class="kpi-info-label">测点在线传输率</div>
+              <div class="kpi-info-val" style="color:var(--color-success);">100% <span>全正常</span></div>
+            </div>
+            <div class="kpi-icon-wrap" style="border-color:rgba(46,158,91,0.3); color:var(--color-success);">⚡</div>
+          </div>
+          <div class="kpi-card">
+            <div>
+              <div class="kpi-info-label">边缘断网离线存储保障</div>
+              <div class="kpi-info-val">≥ 180 <span>天不丢数</span></div>
+            </div>
+            <div class="kpi-icon-wrap">💾</div>
+          </div>
+          <div class="kpi-card">
+            <div>
+              <div class="kpi-info-label">斜拉索索力识别精度</div>
+              <div class="kpi-info-val" style="color:var(--color-primary);">&lt; 5% <span>相对误差</span></div>
+            </div>
+            <div class="kpi-icon-wrap">🎯</div>
+          </div>
+        </div>
+
+        <!-- 左侧面板：环境气象与结构荷载感知 -->
+        <div class="dash-left-col">
+          <!-- 微气象三维风场感知卡 -->
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <span class="tech-card-title">超声波微气象风场感知</span>
+              <span class="badge badge-primary">实时在线</span>
+            </div>
+            <div class="tech-card-body">
+              <div class="wind-compass-widget">
+                <div class="compass-dial">
+                  <span class="compass-label n">N</span>
+                  <span class="compass-label s">S</span>
+                  <span class="compass-label w">W</span>
+                  <span class="compass-label e">E</span>
+                  <div id="compass-pointer" class="compass-pointer" style="transform: rotate(65deg);"></div>
+                  <div class="compass-center-dot"></div>
+                </div>
+                <div class="wind-data-readings">
+                  <div class="wind-read-item">
+                    <span class="wind-read-label">桥面瞬时风速</span>
+                    <span id="val-wind-speed" class="wind-read-num">3.4 m/s</span>
+                  </div>
+                  <div class="wind-read-item">
+                    <span class="wind-read-label">超声波实时风向</span>
+                    <span id="val-wind-angle" class="wind-read-num">65° (东北)</span>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px solid var(--border-color); font-size:11px; color:var(--text-secondary);">
+                <span>大气环境温度: <strong style="color:var(--text-main);">18.5 ℃</strong></span>
+                <span>主梁内湿度: <strong style="color:var(--text-main);">42.8 %RH</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 动态车辆荷载与违章感知卡 -->
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <span class="tech-card-title">车辆荷载动态称重感知</span>
+              <span class="badge badge-success">动态流</span>
+            </div>
+            <div class="tech-card-body" style="padding:10px 14px;">
+              <table class="vehicle-stream-table">
+                <thead>
+                  <tr>
+                    <th>通过时间</th>
+                    <th>抓拍车牌</th>
+                    <th>车型/轴数</th>
+                    <th>实测总重</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>16:58:22</td>
+                    <td>冀F·9B812</td>
+                    <td>集装箱 (6轴)</td>
+                    <td>42.6 t</td>
+                  </tr>
+                  <tr>
+                    <td>16:57:45</td>
+                    <td>京A·D0328</td>
+                    <td>重型自卸 (4轴)</td>
+                    <td class="vehicle-overload">58.2 t [超限]</td>
+                  </tr>
+                  <tr>
+                    <td>16:56:10</td>
+                    <td>冀F·K7611</td>
+                    <td>标准厢货 (2轴)</td>
+                    <td>12.4 t</td>
+                  </tr>
+                  <tr>
+                    <td>16:55:04</td>
+                    <td>津C·39A21</td>
+                    <td>危化品罐车 (5轴)</td>
+                    <td>38.9 t</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- AI 高清视频与病害抓拍卡 -->
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <span class="tech-card-title">AI 视觉裂缝与表观监测</span>
+              <span class="badge badge-primary">YOLOv11 边端推理</span>
+            </div>
+            <div class="tech-card-body">
+              <div style="position:relative; width:100%; height:110px; border-radius:6px; overflow:hidden; background:#f1f4f8; border:1px solid var(--border-color);">
+                <img src="assets/img/yolo_detection.jpeg" style="width:100%; height:100%; object-fit:cover;" />
+                  <div style="position:absolute; bottom:6px; left:8px; font-size:10px; background:rgba(0,0,0,0.72); padding:2px 6px; border-radius:3px; color:#cfe8ff;">
+                  实时识别: 路面微裂缝 (宽 0.15mm)
+                </div>
+              </div>
+              <div style="margin-top:8px; font-size:11px; color:var(--text-secondary); display:flex; justify-content:space-between;">
+                <span>三维激光点云扫描: 正常</span>
+                <span style="color:var(--color-success);">● 钢结构无严重锈蚀</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 中间视口：BIM+GIS 数字孪生一张图 & 索力全景对比图 -->
+        <div class="dash-center-col">
+          <div class="twin-viewport-card tech-card">
+            <div class="twin-toolbar">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:14px; font-weight:700; color:var(--text-main);">桥梁数字孪生仿真视口</span>
+                <span class="badge badge-primary">虚实映射推演</span>
+              </div>
+
+              <!-- 视口切换药丸按钮 -->
+              <div class="view-mode-pill-group">
+                <button class="view-mode-pill active" data-mode="model">三维立面与测点分布</button>
+                <button class="view-mode-pill" data-mode="gis">GIS 桥群一张图</button>
+                <button class="view-mode-pill" data-mode="fem">有限元模型修正</button>
+                <button class="view-mode-pill" data-mode="video">AI 视觉感知画面</button>
+              </div>
+            </div>
+
+            <!-- 仿真舞台 -->
+            <div id="bridge-model-stage" class="bridge-model-stage">
+              <!-- SVG 桥梁仿真骨架将在 dashboard.js 中动态渲染 -->
+            </div>
+
+            <!-- 底部关键测点状态胶囊流 -->
+            <div id="sensor-pill-matrix" class="sensor-pill-matrix">
+              <!-- 测点胶囊将在这里渲染 -->
+            </div>
+          </div>
+
+          <!-- 斜拉索索力全景设计值 vs 实测值对比柱状图 (高度还原图16) -->
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <span id="cable-chart-title" class="tech-card-title">斜拉桥索力设计值与实测值对比 (全桥35对拉索，误差 &lt; 5%)</span>
+              <span style="font-size:11px; color:var(--color-warning);">依据 JT/T 1037-2022 索力调控规范</span>
+            </div>
+            <div class="tech-card-body" style="padding:10px 14px;">
+              <div style="height:175px;">
+                <canvas id="chart-cables"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧面板：实时动态波形曲线与预警流 -->
+        <div class="dash-right-col">
+          <!-- 主梁跨中下挠时程监测 (静力水准仪) -->
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <span class="tech-card-title">主梁跨中下挠时程曲线</span>
+              <span class="badge badge-primary">S-01 毫秒级</span>
+            </div>
+            <div class="tech-card-body" style="padding:10px 12px;">
+              <div class="chart-card-wrapper">
+                <canvas id="chart-deflection"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- 主梁竖向动应变波形 (光纤光栅) -->
+          <div class="tech-card">
+            <div class="tech-card-header">
+              <span class="tech-card-title">主梁竖向动应变时程波形</span>
+              <span class="badge badge-primary">F-01 光纤光栅</span>
+            </div>
+            <div class="tech-card-body" style="padding:10px 12px;">
+              <div class="chart-card-wrapper">
+                <canvas id="chart-vibration"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- 结构异常预警事件流 (可联动触发自动派单) -->
+          <div class="tech-card" style="flex:1;">
+            <div class="tech-card-header">
+              <span class="tech-card-title">实时异常预警与联动闭环</span>
+              <span class="badge badge-warning">处置闭环</span>
+            </div>
+            <div class="tech-card-body">
+              <div id="alert-stream-list" class="alert-stream-list">
+                <div class="alert-event-item level-blue">
+                  <div class="alert-event-header">
+                    <span class="alert-event-title">三级预警：S-01 跨中下挠注意</span>
+                    <span class="alert-event-time">16:42:15</span>
+                  </div>
+                  <div class="alert-event-desc">
+                    特征值达 <strong>-13.8 mm</strong> (基准阈值 -12.0 mm)，车队连续通行引起暂态响应。
+                  </div>
+                  <span class="alert-action-link" onclick="window.app.switchTab('workorder')">👉 进入审批闭环工单</span>
+                </div>
+
+                <div class="alert-event-item level-yellow">
+                  <div class="alert-event-header">
+                    <span class="alert-event-title">二级预警：LK-02 球铰微倾</span>
+                    <span class="alert-event-time">11:20:00</span>
+                  </div>
+                  <div class="alert-event-desc">
+                    乐凯大街转体斜拉桥球铰微倾偏位达 +0.012°，已完成现场激光复核与校核归档。
+                  </div>
+                  <span class="alert-action-link" onclick="window.app.switchTab('workorder')">👉 查看归档记录</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 模块二：系统与技术方案介绍 (官网/申报/领导汇报模式)                      -->
+    <!-- ========================================================================= -->
+    <div id="tab-portal" class="tab-pane">
+      <!-- Hero 区域 -->
+      <section class="portal-hero">
+        <div class="portal-hero-badge">
+          <span>交通运输部行业标准 JT/T 1037-2022</span>
+          <span>·</span>
+          <span>重大工程数字化安全基石</span>
+        </div>
+        <h1 class="portal-hero-title">重大工程结构智能监测与全寿命健康运维系统</h1>
+        <p class="portal-hero-desc">
+          面向桥梁、超高层、大跨度市政基础设施，构建“端—边—云”四层协同架构与六大子系统。融合力学机理与深度学习算法，从“事后抢修”跃迁为“事前预防、事中可控”，为国家关键基础设施提供全天候感知、精准预警、科学评估与全寿命数字化档案。
+        </p>
+        <div class="portal-hero-actions">
+          <button class="btn-primary" onclick="window.app.switchTab('dashboard')">
+            进入数字孪生大屏
+          </button>
+          <button class="btn-outline" onclick="window.app.switchTab('workorder')">
+            查看巡检与工单平台
+          </button>
+          <button class="btn-outline" onclick="window.workorder.generateReport()">
+            下载结构健康评估报告
+          </button>
+        </div>
+
+        <div class="portal-metrics-grid">
+          <div class="portal-metric-item">
+            <div class="portal-metric-num">24h / 365d</div>
+            <div class="portal-metric-label">全天候自动化感知</div>
+            <div class="portal-metric-sub">环境—作用—响应全要素覆盖</div>
+          </div>
+          <div class="portal-metric-item">
+            <div class="portal-metric-num">≥ 180 天</div>
+            <div class="portal-metric-label">边缘断网离线存储</div>
+            <div class="portal-metric-sub">断点自动续传、全链路零丢数</div>
+          </div>
+          <div class="portal-metric-item">
+            <div class="portal-metric-num">&lt; 5%</div>
+            <div class="portal-metric-label">斜拉索索力识别精度</div>
+            <div class="portal-metric-sub">考虑非线性效应的快速调索</div>
+          </div>
+          <div class="portal-metric-item">
+            <div class="portal-metric-num">等保二级</div>
+            <div class="portal-metric-label">网络与数据安全资质</div>
+            <div class="portal-metric-sub">纵深防御体系、支持省市级互联</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 行业痛点与模式变革 -->
+      <section>
+        <div class="section-heading-box">
+          <span class="section-pre-title">Core Transformation</span>
+          <h2 class="section-main-title">从“事后抢修”升级为“事前预防、事中可控”</h2>
+          <p class="section-desc">解决传统人工巡检覆盖面窄、间断性强、隐患难捕捉的痛点，以数据驱动实现科学决策。</p>
+        </div>
+
+        <div class="compare-container">
+          <div class="compare-card traditional">
+            <div class="compare-title" style="color:var(--color-danger);">
+              <span>❌ 传统人工巡检与被动运维模式</span>
+            </div>
+            <ul class="compare-list">
+              <li><span>⚠️</span> <strong>巡检周期长且间断：</strong> 依赖人工经验，逢雨雪恶劣天气无法开展，突发病害难捕捉。</li>
+              <li><span>⚠️</span> <strong>受力与变形不可视：</strong> 无法连续获取动应变、斜拉索内力、微振动等内部力学关键响应。</li>
+              <li><span>⚠️</span> <strong>数据碎片化严重：</strong> 纸质巡检记录归档困难，缺少结构全寿命期数字化退化档案。</li>
+              <li><span>⚠️</span> <strong>被动处置成本高昂：</strong> 病害暴露往往已恶化至不可逆损伤，不得不中断交通进行大范围抢修。</li>
+            </ul>
+          </div>
+
+          <div class="compare-card intelligent">
+            <div class="compare-title" style="color:var(--color-primary);">
+              <span>✅ 智能健康监测系统全新范式</span>
+            </div>
+            <ul class="compare-list">
+              <li><span>✨</span> <strong>全天候自动化感知：</strong> 24小时连续在线监测，环境作用与结构微小变形秒级敏锐捕捉。</li>
+              <li><span>✨</span> <strong>力学映射与闭环研判：</strong> 遵循“环境—作用—响应”逻辑，多级阈值自动规则判级与派单。</li>
+              <li><span>✨</span> <strong>BIM+GIS 数字孪生：</strong> 一张图直观统管桥梁、测点、实时状态与空间退化推演。</li>
+              <li><span>✨</span> <strong>全寿命数字化档案：</strong> 长期数据画像支撑预防性科学养护，有效延长工程使用年限。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 总体架构与六大子系统 -->
+      <section>
+        <div class="section-heading-box">
+          <span class="section-pre-title">System Architecture</span>
+          <h2 class="section-main-title">“端—边—云”四层架构与六大子系统</h2>
+          <p class="section-desc">分层解耦、模块化设计，实现多类型异构传感器同步高精度采集与云端集成分析。</p>
+        </div>
+
+        <div class="arch-showcase-grid">
+          <div class="arch-image-card">
+            <img src="assets/img/system_arch.jpeg" alt="系统总体架构图 (图2)" />
+            <div style="text-align:center; margin-top:8px; font-size:11px; color:var(--text-secondary);">
+              系统总体架构（"端—边—云"四层体系与六大子系统规范架构图）
+            </div>
+          </div>
+
+          <div class="arch-layers-flow">
+            <div class="arch-layer-box">
+              <div class="layer-step-num">4</div>
+              <div class="layer-info">
+                <h4>平台层（云端智能与可视化）</h4>
+                <p>数据存储管理、深度力学处理分析、安全预警与 BIM+GIS 数字孪生可视化集成，统一对外提供 Web/APP 双端服务。</p>
+              </div>
+            </div>
+            <div class="arch-layer-box">
+              <div class="layer-step-num">3</div>
+              <div class="layer-info">
+                <h4>传输层（高可靠加密通信）</h4>
+                <p>光纤专网 / 5G / 4G 多链路互备，采用 HTTPS 传输加密与动态密钥认证，保障数据高质量、毫秒级低时延回传。</p>
+              </div>
+            </div>
+            <div class="arch-layer-box">
+              <div class="layer-step-num">2</div>
+              <div class="layer-info">
+                <h4>边缘层（边缘计算预处理节点）</h4>
+                <p>现场智能网关与分布式采集站，支持本地信号滤波清洗、同步与时序存储；断网可离线缓存 ≥180 天，恢复后自动续传。</p>
+              </div>
+            </div>
+            <div class="arch-layer-box">
+              <div class="layer-step-num">1</div>
+              <div class="layer-info">
+                <h4>感知层（工业级全息传感网络）</h4>
+                <p>布设静力水准仪、光纤光栅、超声波风速仪、MEMS加速度计、北斗GNSS等传感器，在线精准拾取关键部位力学信号。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 核心感知设备矩阵 -->
+      <section>
+        <div class="section-heading-box">
+          <span class="section-pre-title">Industrial Sensors</span>
+          <h2 class="section-main-title">全要素工业级传感器矩阵库</h2>
+          <p class="section-desc">覆盖“环境—作用—响应”全部监测要素，统一选型标准，兼顾长期服役稳定性与高测量精度（点击卡片查看详细技术路线）。</p>
+        </div>
+
+        <div id="sensor-cards-grid" class="sensor-cards-grid">
+          <!-- 传感器卡片将在 portal.js 中动态渲染 -->
+        </div>
+      </section>
+
+      <!-- 硬核研发实力与创新成果 -->
+      <section>
+        <div class="section-heading-box">
+          <span class="section-pre-title">Research & Innovation</span>
+          <h2 class="section-main-title">“力学机理 + 数据驱动”核心科研壁垒</h2>
+          <p class="section-desc">沉淀于自主可控科研成果，在国际顶级力学与结构健康监测期刊发表系列 SCI 论文，形成坚固技术壁垒。</p>
+        </div>
+
+        <div id="research-papers-grid" class="research-papers-grid">
+          <!-- 算法论文卡片将在 portal.js 中动态渲染 -->
+        </div>
+      </section>
+
+      <!-- 网络安全与标准化互联 -->
+      <section>
+        <div class="section-heading-box">
+          <span class="section-pre-title">Security & Interconnection</span>
+          <h2 class="section-main-title">规范互联与网络安全保障体系</h2>
+          <p class="section-desc">网络安全等级保护二级认证，提供 IPSec / SSL VPN 专线与多层纵深安全防护。</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:center;">
+          <div class="arch-image-card" style="text-align:center;">
+            <img src="assets/img/security_network.jpeg" style="max-height:220px; width:auto; margin:0 auto;" alt="网络与数据安全防护体系 (图9)" />
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:8px;">网络与数据全生命周期安全防护体系 (图9)</div>
+          </div>
+          <div style="background:var(--bg-card); border:var(--border-card); border-radius:10px; padding:22px; display:flex; flex-direction:column; gap:12px;">
+            <h4 style="color:var(--color-primary); font-size:15px;">标准化接口与集约化桥群纳管</h4>
+            <p style="font-size:13px; color:var(--text-secondary); line-height:1.6;">
+              1. <strong>遵循标准：</strong> 严格遵照交通运输部 JT/T 1037-2022 标准化数据字典与接口协议；<br/>
+              2. <strong>桥群互联：</strong> 单桥系统支持无缝融入路段级、集团级乃至省级桥群监测监管大平台；<br/>
+              3. <strong>纵深防御：</strong> 网络安全等级保护二级，基于 IPSec / SSL VPN 专线，HTTPS 加密与动态秘钥认证，操作日志全程可审计。
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 模块三：预警与巡检闭环管理后台 (高度还原图6)                           -->
+    <!-- ========================================================================= -->
+    <div id="tab-workorder" class="tab-pane">
+      
+      <!-- 设备在线状态矩阵看板 (还原图6) -->
+      <div class="tech-card" style="margin-bottom:24px;">
+        <div class="tech-card-header">
+          <span class="tech-card-title">现场传感设备在线监控与通信网格 (还原图6)</span>
+          <span class="badge badge-success">MQTT 工业物联网协议</span>
+        </div>
+        <div class="tech-card-body">
+          <div class="device-monitor-summary-bar">
+            <div class="device-stats-counts">
+              <span>设备总数: <strong>223 个</strong></span>
+              <span>异常设备: <strong style="color:var(--color-success);">0 个</strong></span>
+              <span>正常设备: <strong style="color:var(--color-primary);">223 个</strong></span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn-outline" style="padding:4px 10px; font-size:11px;" onclick="alert('已重新扫描网络，223个设备状态通信均正常！')">刷新设备状态</button>
+            </div>
+          </div>
+
+          <div id="device-grid-matrix" class="device-grid-matrix">
+            <!-- 223 个设备网格将在 workorder.js 中渲染 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 预警处置闭环流程步骤指示条 (图6核心业务逻辑) -->
+      <div class="tech-card" style="margin-bottom:24px;">
+        <div class="tech-card-header">
+          <span class="tech-card-title">智能预警与闭环运维处置管理</span>
+          <span class="badge badge-primary">监测—评估—预警—养护 闭环</span>
+        </div>
+        <div class="tech-card-body">
+          <div class="closed-loop-steps">
+            <div class="step-node active">
+              <div class="step-circle">1</div>
+              <div class="step-label">特征值超阈</div>
+            </div>
+            <div class="step-node active">
+              <div class="step-circle">2</div>
+              <div class="step-label">规则智能判级</div>
+            </div>
+            <div class="step-node active">
+              <div class="step-circle">3</div>
+              <div class="step-label">自动生成派单</div>
+            </div>
+            <div class="step-node active">
+              <div class="step-circle">4</div>
+              <div class="step-label">在线专家审批</div>
+            </div>
+            <div class="step-node active">
+              <div class="step-circle">5</div>
+              <div class="step-label">跟踪归档留痕</div>
+            </div>
+          </div>
+
+          <!-- 工单流转操作表格 -->
+          <div class="table-scroll-wrap">
+            <table class="work-order-table">
+              <thead>
+                <tr>
+                  <th>工单编号</th>
+                  <th>监测工程</th>
+                  <th>报警测点</th>
+                  <th>预警等级</th>
+                  <th>触发瞬态值</th>
+                  <th>发生时间</th>
+                  <th>流转阶段</th>
+                  <th>责任人</th>
+                  <th>操作处置</th>
+                </tr>
+              </thead>
+              <tbody id="work-order-tbody">
+                <!-- 工单将在 workorder.js 中渲染 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 结构全寿命健康度定期评估报告卡 -->
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <span class="tech-card-title">结构健康度综合评估与数字化档案 (JT/T 1037-2022)</span>
+          <button class="btn-primary" style="padding:4px 12px; font-size:12px;" onclick="window.workorder.generateReport()">
+            📄 导出结构健康定期评估月报
+          </button>
+        </div>
+        <div class="tech-card-body">
+          <div class="health-assessment-layout">
+            <div class="health-radar-container">
+              <canvas id="chart-health-radar"></canvas>
+            </div>
+            <div class="health-summary-panel">
+              <div style="display:flex; align-items:center; gap:20px;">
+                <div style="width:160px; height:120px;">
+                  <canvas id="chart-health-gauge"></canvas>
+                </div>
+                <div style="flex:1;">
+                  <h4 style="color:var(--color-primary); margin-bottom:6px;">综合评估结论：A级 (良好受控)</h4>
+                  <p style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+                    基于长期累积监测大数据与结构基准模态反演，当前结构变形稳定性、斜拉索索力均匀度及动力特性均在规范容许区间，未出现渐进性累积损伤。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 模块四：典型工程案例库 (图1、图8、图13、图15实绩)                      -->
+    <!-- ========================================================================= -->
+    <div id="tab-cases" class="tab-pane">
+      <div class="section-heading-box" style="margin-top:10px;">
+        <span class="section-pre-title">Demonstration Projects</span>
+        <h2 class="section-main-title">重大工程落地案例与实测成效</h2>
+        <p class="section-desc">已成功应用于国内多座特大型斜拉桥、转体斜拉桥、超高层地标及跨渠连跨桥群，经过工程实测全面检验。</p>
+      </div>
+
+      <div id="cases-grid-layout" class="cases-grid-layout">
+        <!-- 案例卡片将在 portal.js 中动态渲染 -->
+      </div>
+    </div>
+
+    </main>
+  </div>
+
+  <!-- 全局通用模态弹窗 -->
+  <div id="global-modal-overlay" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title-text">系统提示</h3>
+        <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+      </div>
+      <div id="modal-body-container" class="modal-body">
+        <!-- 模态内容动态插入 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 脚本层引入 (按依赖顺序加载，完全离线自包含) -->
+  <script src="js/mock-data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/workorder.js"></script>
+  <script src="js/portal.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
