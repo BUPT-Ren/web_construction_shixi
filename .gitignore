@@ -19,3 +19,9 @@ AGENTS.md
 智能监测系统介绍1027.pdf
 目标样式_1.jpg
 目标样式_2.jpg
+
+# Python 后端
+__pycache__/
+*.pyc
+.venv/
+backend/shm.db
