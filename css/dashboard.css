@@ -462,6 +462,29 @@
   font-size: 10px;
 }
 
+.alert-event-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alert-event-close {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 3px;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.alert-event-close:hover {
+  color: var(--color-danger);
+  background: rgba(229, 72, 77, 0.12);
+}
+
 .alert-event-desc {
   color: var(--text-secondary);
   line-height: 1.4;

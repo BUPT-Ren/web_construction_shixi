@@ -351,7 +351,10 @@ class DashboardController {
     newAlert.innerHTML = `
       <div class="alert-event-header">
         <span class="alert-event-title" style="color:var(--color-danger);">🚨 一级报警：S-01 瞬态超阈</span>
-        <span class="alert-event-time">刚刚</span>
+        <div class="alert-event-header-right">
+          <span class="alert-event-time">刚刚</span>
+          <button type="button" class="alert-event-close" title="关闭该报警" onclick="this.closest('.alert-event-item').remove()">×</button>
+        </div>
       </div>
       <div class="alert-event-desc">
         跨中静力水准仪瞬时挠度达 <strong>-14.8 mm</strong>，超出安全阈值(-14.0 mm)！已触发联动警报并自动生成闭环工单！
