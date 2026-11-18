@@ -33,8 +33,15 @@
     <!-- 右侧工具栏 -->
     <div class="header-actions">
       <div class="bridge-selector-wrap">
-        <label>监测对象:</label>
-        <select id="global-bridge-select" class="bridge-select"></select>
+        <span class="bridge-selector-label">监测对象</span>
+        <div class="bridge-dropdown" id="bridge-dropdown">
+          <button type="button" class="bridge-dropdown-btn" id="bridge-dropdown-btn" aria-haspopup="listbox" aria-expanded="false">
+            <span class="bridge-dropdown-dot"></span>
+            <span class="bridge-dropdown-current" id="bridge-dropdown-current">选择工程</span>
+            <svg class="bridge-dropdown-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="bridge-dropdown-menu" id="bridge-dropdown-menu" role="listbox"></div>
+        </div>
       </div>
 
       <button class="btn-trigger-alert" onclick="window.dashboard.triggerDemoAlert()" title="触发一次真实的多级报警联动演示">

@@ -6,6 +6,7 @@ class AppController {
   constructor() {
     this.currentTab = 'dashboard'; // 默认启动直接打开最具视觉冲击力的监测大屏
     this.clockTimer = null;
+    this.bridgeDropdown = null;
   }
 
   init() {
@@ -56,21 +57,79 @@ class AppController {
   }
 
   initBridgeSelector() {
-    const select = document.getElementById('global-bridge-select');
-    if (!select) return;
+    const dropdown = document.getElementById('bridge-dropdown');
+    const btn = document.getElementById('bridge-dropdown-btn');
+    const menu = document.getElementById('bridge-dropdown-menu');
+    const currentEl = document.getElementById('bridge-dropdown-current');
+    if (!dropdown || !btn || !menu || !currentEl) return;
 
-    select.innerHTML = window.SystemMockData.projects.map(p => `
-      <option value="${p.id}">${p.name} (${p.type})</option>
+    const projects = window.SystemMockData.projects || [];
+    this.bridgeDropdown = { dropdown, btn, menu, currentEl };
+
+    menu.innerHTML = projects.map(p => `
+      <div class="bridge-dropdown-item" data-bridge-id="${p.id}" role="option">
+        <div class="bridge-dropdown-item-info">
+          <div class="bridge-dropdown-item-name">${p.name}</div>
+          <div class="bridge-dropdown-item-type">${p.type}</div>
+        </div>
+        <span class="bridge-dropdown-item-dot"></span>
+        <svg class="bridge-dropdown-item-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
     `).join('');
 
-    select.addEventListener('change', (e) => {
-      this.switchToBridge(e.target.value);
+    // 默认选中第一个工程
+    this.setBridgeDropdownValue(projects[0] ? projects[0].id : null, projects);
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleBridgeDropdown();
+    });
+
+    menu.querySelectorAll('.bridge-dropdown-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const id = item.getAttribute('data-bridge-id');
+        this.closeBridgeDropdown();
+        this.switchToBridge(id);
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target)) this.closeBridgeDropdown();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') this.closeBridgeDropdown();
     });
   }
 
+  setBridgeDropdownValue(bridgeId, projects) {
+    if (!this.bridgeDropdown) return;
+    const { menu, currentEl } = this.bridgeDropdown;
+    const p = (projects || window.SystemMockData.projects).find(x => x.id === bridgeId);
+    if (currentEl) currentEl.textContent = p ? p.name : '选择工程';
+    if (menu) {
+      menu.querySelectorAll('.bridge-dropdown-item').forEach(item => {
+        item.classList.toggle('active', item.getAttribute('data-bridge-id') === bridgeId);
+      });
+    }
+  }
+
+  toggleBridgeDropdown() {
+    if (!this.bridgeDropdown) return;
+    const { dropdown, btn } = this.bridgeDropdown;
+    const isOpen = dropdown.classList.toggle('open');
+    if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+
+  closeBridgeDropdown() {
+    if (!this.bridgeDropdown) return;
+    const { dropdown, btn } = this.bridgeDropdown;
+    dropdown.classList.remove('open');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+
   switchToBridge(bridgeId) {
-    const select = document.getElementById('global-bridge-select');
-    if (select) select.value = bridgeId;
+    this.setBridgeDropdownValue(bridgeId, window.SystemMockData.projects);
 
     window.dashboard.currentProjectId = bridgeId;
     window.dashboard.renderBridgeSvg();
