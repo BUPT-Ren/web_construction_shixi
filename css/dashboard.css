@@ -291,6 +291,8 @@
 .sensor-hotspot {
   cursor: pointer;
   transition: transform 0.2s ease;
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 .sensor-hotspot:hover circle {
