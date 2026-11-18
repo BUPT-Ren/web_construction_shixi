@@ -18,11 +18,13 @@ class AppController {
     window.dashboard = new DashboardController();
     window.workorder = new WorkorderController();
     window.portal = new PortalController();
+    window.aiChat = new AiChatController();
 
     // 初始化各个子模块
     window.dashboard.init();
     window.workorder.init();
     window.portal.init();
+    window.aiChat.init();
 
     // 默认展示大屏
     this.switchTab('dashboard');

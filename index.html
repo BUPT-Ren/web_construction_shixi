@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="css/portal.css">
   <link rel="stylesheet" href="css/workorder.css">
+  <link rel="stylesheet" href="css/ai.css">
 </head>
 <body>
 
@@ -97,6 +98,10 @@
         <button class="nav-tab-btn" data-tab="query">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           数据查询
+        </button>
+        <button class="nav-tab-btn" data-tab="ai">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z"/></svg>
+          智能问答
         </button>
       </nav>
     </aside>
@@ -583,6 +588,41 @@
       </section>
     </div>
 
+    <!-- ================================================================ -->
+    <!-- 12. 智能问答                                                      -->
+    <!-- ================================================================ -->
+    <div id="tab-ai" class="tab-pane">
+      <div class="ai-chat-shell">
+        <div class="ai-chat-header">
+          <div>
+            <h2>桥梁知识智能问答助手</h2>
+            <div class="ai-chat-header-desc">基于结构健康监测知识库的流式对话演示，支持桥梁养护、监测技术、预警评估等专业问题。</div>
+          </div>
+          <div class="ai-chat-header-actions">
+            <span class="badge badge-primary">流式响应</span>
+            <button id="ai-clear-btn" class="btn-outline" style="padding:6px 14px; font-size:12px;">新对话</button>
+          </div>
+        </div>
+
+        <div id="ai-message-list" class="ai-message-list"></div>
+
+        <div class="ai-suggestion-bar">
+          <span class="ai-suggestion-label">你可以这样问：</span>
+          <div id="ai-suggestion-chips" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+        </div>
+
+        <div class="ai-input-bar">
+          <textarea id="ai-input" placeholder="请输入你的问题，例如：斜拉索索力是怎么监测的？" rows="1"></textarea>
+          <button id="ai-send-btn" class="ai-send-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            发送
+          </button>
+        </div>
+
+        <div class="ai-disclaimer">演示模式：回答由本地桥梁知识库生成并流式输出，仅用于功能演示，不接入外部模型。</div>
+      </div>
+    </div>
+
   </main>
 
   </div>
@@ -606,6 +646,7 @@
   <script src="js/dashboard.js"></script>
   <script src="js/workorder.js"></script>
   <script src="js/portal.js"></script>
+  <script src="js/ai.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
