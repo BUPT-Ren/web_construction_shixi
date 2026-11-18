@@ -4,7 +4,7 @@
 
 class AppController {
   constructor() {
-    this.currentTab = 'dashboard'; // 默认启动直接打开最具视觉冲击力的监测大屏
+    this.currentTab = 'overview'; // 默认启动进入项目总览
     this.clockTimer = null;
     this.bridgeDropdown = null;
   }
@@ -27,8 +27,8 @@ class AppController {
     window.portal.init();
     window.aiChat.init();
 
-    // 默认展示大屏
-    this.switchTab('dashboard');
+    // 默认展示项目总览
+    this.switchTab('overview');
 
     // 监听窗口尺寸变化自适应重绘
     window.addEventListener('resize', () => {
