@@ -733,3 +733,108 @@ body {
 #cases-grid-layout {
   scroll-margin-top: 80px;
 }
+
+/* 全局轻提示 Toast */
+.global-toast-container {
+  position: fixed;
+  top: 76px;
+  right: 20px;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.global-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--color-success);
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(16, 24, 40, 0.16);
+  padding: 10px 14px;
+  font-size: 13px;
+  max-width: 340px;
+  animation: toastIn 0.25s ease, toastOut 0.3s ease 2.2s forwards;
+}
+
+.global-toast.warning {
+  border-left-color: var(--color-warning);
+}
+
+.global-toast.error {
+  border-left-color: var(--color-danger);
+}
+
+.toast-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(46, 158, 91, 0.12);
+  color: var(--color-success);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.global-toast.warning .toast-icon {
+  background: rgba(230, 162, 60, 0.12);
+  color: var(--color-warning);
+}
+
+.global-toast.error .toast-icon {
+  background: rgba(229, 72, 77, 0.12);
+  color: var(--color-danger);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastOut {
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
+/* 打印样式：仅当报告预览弹窗打开时，只打印报告内容 */
+@media print {
+  body:has(#global-modal-overlay.active) .global-header,
+  body:has(#global-modal-overlay.active) .app-shell {
+    display: none !important;
+  }
+
+  body:has(#global-modal-overlay.active) #global-modal-overlay {
+    position: static;
+    display: block !important;
+    background: #ffffff;
+    backdrop-filter: none;
+    padding: 0;
+  }
+
+  body:has(#global-modal-overlay.active) .modal-content {
+    box-shadow: none;
+    border: none;
+    max-height: none;
+    max-width: 100%;
+    width: 100%;
+    overflow: visible;
+  }
+
+  body:has(#global-modal-overlay.active) .modal-header {
+    background: #ffffff;
+  }
+
+  body:has(#global-modal-overlay.active) .modal-close-btn,
+  body:has(#global-modal-overlay.active) .modal-body .btn-primary,
+  body:has(#global-modal-overlay.active) .modal-body .btn-outline {
+    display: none !important;
+  }
+}

@@ -230,6 +230,19 @@ class AppController {
     if (overlay) overlay.classList.remove('active');
   }
 
+  toast(message, type) {
+    const container = document.getElementById('global-toast');
+    if (!container) return;
+    const icons = { success: '✓', warning: '!', error: '✕' };
+    const t = document.createElement('div');
+    t.className = 'global-toast ' + (type || 'success');
+    t.innerHTML = `<span class="toast-icon">${icons[type] || icons.success}</span><span>${message}</span>`;
+    container.appendChild(t);
+    setTimeout(() => {
+      if (t.parentNode) t.parentNode.removeChild(t);
+    }, 2600);
+  }
+
   toggleFullScreen() {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch(() => {});

@@ -342,7 +342,10 @@ class DashboardController {
   }
 
   // 模拟突发预警联动
-  triggerDemoAlert() {
+  triggerDemoAlert(goToDashboard) {
+    if (goToDashboard && window.app) {
+      window.app.switchTab('dashboard');
+    }
     const alertList = document.getElementById('alert-stream-list');
     if (!alertList) return;
 

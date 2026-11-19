@@ -87,7 +87,7 @@ class WorkorderController {
 
         <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
           <button class="btn-outline" onclick="window.app.closeModal()">关闭</button>
-          <button class="btn-primary" onclick="alert('已下发远程自检指令，设备运行正常！')">远程诊断自检</button>
+          <button class="btn-primary" onclick="window.app.toast('已下发远程自检指令，设备运行正常！', 'success')">远程诊断自检</button>
         </div>
       </div>
     `);
@@ -122,7 +122,7 @@ class WorkorderController {
 
         <div style="display:flex; justify-content:flex-end; gap:10px;">
           <button class="btn-outline" onclick="window.app.closeModal()">返回列表</button>
-          <button class="btn-primary" onclick="alert('审批成功！已同步至省级桥群管理系统并完成归档留痕。'); window.app.closeModal();">审批通过并归档</button>
+          <button class="btn-primary" onclick="window.app.toast('审批成功！已同步至省级桥群管理系统并完成归档留痕。', 'success'); window.app.closeModal();">审批通过并归档</button>
         </div>
       </div>
     `);

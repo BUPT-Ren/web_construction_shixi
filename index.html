@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <button class="btn-trigger-alert" onclick="window.dashboard.triggerDemoAlert()" title="触发一次真实的多级报警联动演示">
+      <button class="btn-trigger-alert" onclick="window.dashboard.triggerDemoAlert(true)" title="触发一次真实的多级报警联动演示">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         模拟突发预警
       </button>
@@ -381,7 +381,7 @@
               <span>异常设备: <strong style="color:var(--color-success);">0 个</strong></span>
               <span>正常设备: <strong style="color:var(--color-primary);">223 个</strong></span>
             </div>
-            <div style="display:flex; gap:8px;"><button class="btn-outline" style="padding:4px 10px; font-size:11px;" onclick="alert('已重新扫描网络，223个设备状态通信均正常！')">刷新设备状态</button></div>
+          <div style="display:flex; gap:8px;"><button class="btn-outline" style="padding:4px 10px; font-size:11px;" onclick="window.app.toast('已重新扫描网络，223个设备状态通信均正常！', 'success')">刷新设备状态</button></div>
           </div>
           <div id="device-grid-matrix" class="device-grid-matrix"></div>
         </div>
@@ -645,6 +645,9 @@
       </div>
     </div>
   </div>
+
+  <!-- 全局轻提示 Toast 容器 -->
+  <div id="global-toast" class="global-toast-container"></div>
 
   <!-- 脚本层引入 (按依赖顺序加载，完全离线自包含) -->
   <script src="js/mock-data.js"></script>
