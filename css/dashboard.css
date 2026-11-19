@@ -290,7 +290,13 @@
 /* 测点热点脉冲按钮 */
 .sensor-hotspot {
   cursor: pointer;
-  transition: transform 0.2s ease;
+}
+
+/* 只对形状本身缩放，且以各自中心为原点，避免整组偏移引起悬停抖动 */
+.sensor-hotspot > circle,
+.sensor-hotspot > polygon,
+.sensor-hotspot > rect {
+  transition: transform 0.2s ease, filter 0.2s ease;
   transform-box: fill-box;
   transform-origin: center;
 }
@@ -300,8 +306,11 @@
   stroke-width: 2px;
 }
 
-.sensor-hotspot:hover {
-  transform: scale(1.2);
+.sensor-hotspot:hover > circle,
+.sensor-hotspot:hover > polygon,
+.sensor-hotspot:hover > rect {
+  transform: scale(1.25);
+  filter: drop-shadow(0 0 3px rgba(31, 111, 235, 0.85));
 }
 
 /* 测点浮窗气泡 */
