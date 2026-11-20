@@ -257,4 +257,7 @@ class AppController {
 document.addEventListener('DOMContentLoaded', () => {
   window.app = new AppController();
   window.app.init();
+
+  window.demoAuth = new DemoAuthController();
+  window.demoAuth.init();
 });

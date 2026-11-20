@@ -11,8 +11,55 @@
   <link rel="stylesheet" href="css/portal.css">
   <link rel="stylesheet" href="css/workorder.css">
   <link rel="stylesheet" href="css/ai.css">
+  <link rel="stylesheet" href="css/login.css">
 </head>
-<body>
+<body class="login-locked">
+
+  <!-- 演示登录遮罩（纯前端校验，不连接服务器） -->
+  <div id="login-overlay" class="login-overlay active">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="login-brand-logo"><img src="assets/img/company_logo.png" alt="公司 Logo" /></div>
+        <div class="login-brand-title">工程结构智能监测与全寿命健康运维系统</div>
+        <div class="login-brand-sub">演示环境登录 · 桥梁健康监测平台</div>
+      </div>
+
+      <form id="login-form" class="login-form" autocomplete="off">
+        <div class="login-field">
+          <label for="login-username">账号</label>
+          <div class="login-input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input id="login-username" name="username" type="text" placeholder="请输入账号" autocomplete="username" />
+          </div>
+        </div>
+        <div class="login-field">
+          <label for="login-password">密码</label>
+          <div class="login-input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input id="login-password" name="password" type="password" placeholder="请输入密码" autocomplete="current-password" />
+          </div>
+        </div>
+        <div id="login-error" class="login-error"></div>
+        <button type="submit" id="login-submit" class="login-submit">登录系统</button>
+      </form>
+
+      <div class="login-demo-accounts">
+        <span class="login-demo-label">演示账号（点击自动填入）</span>
+        <div class="login-demo-chips">
+          <button type="button" class="login-demo-chip" data-user="admin" data-pass="admin123">
+            <span class="login-demo-role">管理员</span>
+            <code>admin / admin123</code>
+          </button>
+          <button type="button" class="login-demo-chip" data-user="engineer" data-pass="engineer123">
+            <span class="login-demo-role">工程师</span>
+            <code>engineer / engineer123</code>
+          </button>
+        </div>
+      </div>
+
+      <div class="login-footnote">本页为演示登录，仅校验本地演示账号，不连接服务器。</div>
+    </div>
+  </div>
 
   <!-- 全局顶部导航栏 -->
   <header class="global-header">
@@ -54,6 +101,17 @@
       <button class="btn-outline" style="padding:6px 10px;" onclick="window.app.toggleFullScreen()" title="全屏演示模式">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
       </button>
+
+      <div id="header-user" class="header-user" style="display:none;">
+        <span class="header-user-avatar" id="header-user-avatar">管</span>
+        <span class="header-user-meta">
+          <span class="header-user-name" id="header-user-name">管理员</span>
+          <span class="header-user-role" id="header-user-role">admin</span>
+        </span>
+        <button type="button" class="header-user-logout" id="header-user-logout" title="退出登录">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -656,6 +714,7 @@
   <script src="js/workorder.js"></script>
   <script src="js/portal.js"></script>
   <script src="js/ai.js"></script>
+  <script src="js/auth-demo.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

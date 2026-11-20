@@ -39,6 +39,15 @@ python -m http.server 8080
 # 浏览器访问 http://localhost:8080
 ```
 
+### 演示登录账号（纯前端演示，不连接服务器）
+
+打开页面后先进入演示登录页，可使用以下账号（点击登录卡片上的账号块可自动填入）：
+
+- 管理员：`admin` / `admin123`
+- 工程师：`engineer` / `engineer123`
+
+登录仅在本机校验演示账号，用于展示登录与角色切换交互；同一浏览器标签页内刷新会保持登录状态，退出登录或新开标签页需重新登录。
+
 ---
 
 ## 🎬 汇报演示操作动线建议（助你赢得领导/导师好评）
@@ -77,8 +86,8 @@ python -m http.server 8080
 
 ### 工程组织
 
-- **样式**：按模块拆分 `base / dashboard / portal / workorder / ai` 五个 CSS 文件。
-- **脚本**：`app.js` 全局路由与 12 个页面切换；`dashboard / portal / workorder / ai` 四大业务控制器；`charts.js` 图表库；`mock-data.js` 数据源。
+- **样式**：按模块拆分 `base / dashboard / portal / workorder / ai / login` 六个 CSS 文件。
+- **脚本**：`app.js` 全局路由与 12 个页面切换；`dashboard / portal / workorder / ai` 四大业务控制器；`auth-demo.js` 演示登录；`charts.js` 图表库；`mock-data.js` 数据源。
 - **资源**：`assets/img` 内从 PDF 提取的工程实图与图表，全部本地引用、离线可用。
 
 ### 运行与部署
@@ -101,7 +110,8 @@ demo/
 │   ├── dashboard.css            # 数字孪生大屏样式（三栏网格、SVG桥梁、波形卡片）
 │   ├── portal.css               # 方案与系统介绍样式（Hero区、架构流向、传感器网格）
 │   ├── workorder.css            # 工单后台样式（设备矩阵、流程步骤条、健康评估）
-│   └── ai.css                   # 智能问答样式（流式对话窗口、气泡、打字机光标）
+│   ├── ai.css                   # 智能问答样式（流式对话窗口、气泡、打字机光标）
+│   └── login.css                # 演示登录遮罩与顶栏用户信息样式
 ├── js/
 │   ├── app.js                   # 全局主控制器（路由Tab切换、时钟、全屏、模态框）
 │   ├── mock-data.js             # 真实工程模拟数据库（巨力大桥、乐凯大桥、223个测点）
@@ -109,7 +119,8 @@ demo/
 │   ├── dashboard.js             # 大屏实时传感器数据流驱动、测点交互、突发警报触发
 │   ├── portal.js                # 介绍页逻辑（传感器详情弹窗、论文卡片、案例渲染）
 │   ├── workorder.js             # 工单流转操作、设备详情诊断、健康报告预览与打印
-│   └── ai.js                    # 桥梁知识问答助手（本地知识库检索 + 流式输出）
+│   ├── ai.js                    # 桥梁知识问答助手（本地知识库检索 + 流式输出）
+│   └── auth-demo.js             # 演示登录（本地校验演示账号、顶栏用户与退出）
 └── assets/
     └── img/                     # 从原 PDF 提取的 19 张高清工程实图与图表
 ```
