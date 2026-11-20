@@ -90,6 +90,9 @@ class DemoAuthController {
     if (this.avatarEl) this.avatarEl.textContent = identity.name.slice(0, 1);
     if (this.nameEl) this.nameEl.textContent = identity.name;
     if (this.roleEl) this.roleEl.textContent = identity.role;
+    if (window.portal && window.portal.applyRole) {
+      window.portal.applyRole(identity.role);
+    }
     if (notify && window.app && window.app.toast) {
       window.app.toast(`欢迎回来，${identity.name}`, 'success');
     }
@@ -114,6 +117,9 @@ class DemoAuthController {
       // 忽略存储异常
     }
     this.current = null;
+    if (window.portal && window.portal.applyRole) {
+      window.portal.applyRole(null);
+    }
     this.showLogin();
   }
 }

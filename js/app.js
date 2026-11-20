@@ -63,8 +63,29 @@ class AppController {
     const currentEl = document.getElementById('bridge-dropdown-current');
     if (!dropdown || !btn || !menu || !currentEl) return;
 
+    this.bridgeDropdown = { dropdown, btn, menu, currentEl, currentId: null };
+    this.renderBridgeDropdownItems();
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleBridgeDropdown();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target)) this.closeBridgeDropdown();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') this.closeBridgeDropdown();
+    });
+  }
+
+  // 重新渲染顶栏“监测对象”下拉项（新增/删除工程后保持同步）
+  renderBridgeDropdownItems() {
+    if (!this.bridgeDropdown) return;
+    const { menu } = this.bridgeDropdown;
+    if (!menu) return;
     const projects = window.SystemMockData.projects || [];
-    this.bridgeDropdown = { dropdown, btn, menu, currentEl };
 
     menu.innerHTML = projects.map(p => `
       <div class="bridge-dropdown-item" data-bridge-id="${p.id}" role="option">
@@ -77,14 +98,6 @@ class AppController {
       </div>
     `).join('');
 
-    // 默认选中第一个工程
-    this.setBridgeDropdownValue(projects[0] ? projects[0].id : null, projects);
-
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.toggleBridgeDropdown();
-    });
-
     menu.querySelectorAll('.bridge-dropdown-item').forEach(item => {
       item.addEventListener('click', () => {
         const id = item.getAttribute('data-bridge-id');
@@ -93,18 +106,21 @@ class AppController {
       });
     });
 
-    document.addEventListener('click', (e) => {
-      if (!dropdown.contains(e.target)) this.closeBridgeDropdown();
-    });
+    const current = projects.find(p => p.id === this.bridgeDropdown.currentId);
+    const target = current || projects[0];
+    this.setBridgeDropdownValue(target ? target.id : null, projects);
+  }
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') this.closeBridgeDropdown();
-    });
+  refreshBridgeDropdown(preserveId) {
+    if (!this.bridgeDropdown) return;
+    if (preserveId) this.bridgeDropdown.currentId = preserveId;
+    this.renderBridgeDropdownItems();
   }
 
   setBridgeDropdownValue(bridgeId, projects) {
     if (!this.bridgeDropdown) return;
     const { menu, currentEl } = this.bridgeDropdown;
+    this.bridgeDropdown.currentId = bridgeId;
     const p = (projects || window.SystemMockData.projects).find(x => x.id === bridgeId);
     if (currentEl) currentEl.textContent = p ? p.name : '选择工程';
     if (menu) {

@@ -3,12 +3,218 @@
  */
 
 class PortalController {
+  constructor() {
+    this.currentRole = null;
+  }
+
   init() {
     this.renderSensorsGrid();
     this.renderResearchPapers();
     this.renderCasesList();
     this.renderRealtimeMonitorTable();
     this.renderProjectsTable();
+  }
+
+  // 根据当前登录角色刷新项目管理权限 UI
+  applyRole(role) {
+    this.currentRole = role || null;
+    this.renderProjectsToolbar();
+    this.renderProjectsTable();
+  }
+
+  renderProjectsToolbar() {
+    const el = document.getElementById('projects-admin-actions');
+    if (!el) return;
+    if (this.currentRole === 'admin') {
+      el.innerHTML = '<button class="btn-primary project-add-btn" onclick="window.portal.openProjectForm(null)">＋ 新增工程</button>';
+    } else {
+      const roleName = this.currentRole === 'engineer' ? '工程师' : '访客';
+      el.innerHTML = `<span class="projects-role-hint">🔒 当前为${roleName}权限：仅可查看工程，新增 / 编辑 / 删除仅管理员可用</span>`;
+    }
+  }
+
+  escapeHtml(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[c]);
+  }
+
+  denyAdminAction() {
+    window.app.toast('该操作仅管理员可执行，请联系管理员', 'warning');
+  }
+
+  refreshProjectViews() {
+    this.renderProjectsTable();
+    this.renderCasesList();
+    if (window.app && window.app.refreshBridgeDropdown) {
+      window.app.refreshBridgeDropdown();
+    }
+  }
+
+  openProjectForm(projectId) {
+    if (this.currentRole !== 'admin') {
+      this.denyAdminAction();
+      return;
+    }
+    const isEdit = !!projectId;
+    const p = isEdit ? window.SystemMockData.projects.find((x) => x.id === projectId) : null;
+    if (isEdit && !p) return;
+
+    const val = (v) => this.escapeHtml(v);
+    window.app.showModal(isEdit ? `编辑工程：${p.name}` : '新增监测工程', `
+      <form class="project-form" onsubmit="return false;">
+        <div class="project-form-row">
+          <div class="project-form-field">
+            <label>工程名称 *</label>
+            <input id="pf-name" type="text" value="${isEdit ? val(p.name) : ''}" placeholder="如：某某大桥" />
+          </div>
+          <div class="project-form-field">
+            <label>结构类型 *</label>
+            <input id="pf-type" type="text" value="${isEdit ? val(p.type) : ''}" placeholder="如：独塔斜拉桥" />
+          </div>
+        </div>
+        <div class="project-form-row">
+          <div class="project-form-field">
+            <label>所在地</label>
+            <input id="pf-location" type="text" value="${isEdit ? val(p.location) : ''}" placeholder="如：河北省保定市" />
+          </div>
+          <div class="project-form-field">
+            <label>规模</label>
+            <input id="pf-span" type="text" value="${isEdit ? val(p.span) : ''}" placeholder="如：主跨 160m + 边跨 100m" />
+          </div>
+        </div>
+        <div class="project-form-row">
+          <div class="project-form-field">
+            <label>运行状态</label>
+            <input id="pf-status" type="text" value="${isEdit ? val(p.status) : '正常服役监测中'}" />
+          </div>
+          <div class="project-form-field">
+            <label>健康指数（0-100）</label>
+            <input id="pf-score" type="number" min="0" max="100" step="0.1" value="${isEdit ? p.healthScore : 90}" />
+          </div>
+        </div>
+        <div class="project-form-field">
+          <label>简介</label>
+          <textarea id="pf-desc" rows="3" placeholder="可选，简要描述工程特点">${isEdit ? val(p.description) : ''}</textarea>
+        </div>
+        <div class="project-form-actions">
+          <button type="button" class="btn-outline" onclick="window.app.closeModal()">取消</button>
+          <button type="button" class="btn-primary" onclick="window.portal.submitProjectForm(${isEdit ? `'${p.id}'` : 'null'})">${isEdit ? '保存修改' : '创建工程'}</button>
+        </div>
+      </form>
+    `);
+  }
+
+  submitProjectForm(projectId) {
+    if (this.currentRole !== 'admin') {
+      this.denyAdminAction();
+      return;
+    }
+    const name = (document.getElementById('pf-name').value || '').trim();
+    const type = (document.getElementById('pf-type').value || '').trim();
+    const location = (document.getElementById('pf-location').value || '').trim();
+    const span = (document.getElementById('pf-span').value || '').trim();
+    const status = (document.getElementById('pf-status').value || '').trim();
+    const scoreInput = parseFloat(document.getElementById('pf-score').value);
+    const description = (document.getElementById('pf-desc').value || '').trim();
+
+    if (!name || !type) {
+      window.app.toast('请至少填写工程名称和结构类型', 'warning');
+      return;
+    }
+
+    const healthScore = Number.isFinite(scoreInput) ? Math.max(0, Math.min(100, scoreInput)) : 90;
+    const healthLevel = healthScore >= 90 ? 'A级 (优良)' : healthScore >= 80 ? 'B级 (良好)' : 'C级 (需关注)';
+
+    if (projectId) {
+      const p = window.SystemMockData.projects.find((x) => x.id === projectId);
+      if (!p) return;
+      Object.assign(p, {
+        name, type, location, span,
+        status: status || p.status,
+        healthScore, healthLevel,
+        description: description || p.description
+      });
+      window.app.closeModal();
+      this.refreshProjectViews();
+      window.app.toast('工程信息已更新', 'success');
+      return;
+    }
+
+    window.SystemMockData.projects.push({
+      id: `proj_${Date.now()}`,
+      name,
+      type,
+      location,
+      span,
+      status: status || '正常服役监测中',
+      healthScore,
+      healthLevel,
+      description: description || '新增监测工程（演示数据）。',
+      image: '',
+      keyPoints: [],
+      cables: [],
+      monitoringItems: []
+    });
+    window.app.closeModal();
+    this.refreshProjectViews();
+    window.app.toast('工程已创建（演示数据，刷新页面后恢复）', 'success');
+  }
+
+  confirmDeleteProject(projectId) {
+    if (this.currentRole !== 'admin') {
+      this.denyAdminAction();
+      return;
+    }
+    const p = window.SystemMockData.projects.find((x) => x.id === projectId);
+    if (!p) return;
+    window.app.showModal('删除确认', `
+      <div style="font-size:13px; color:var(--text-secondary); line-height:1.8;">
+        确定要删除工程 <strong style="color:var(--text-main);">${this.escapeHtml(p.name)}</strong> 吗？<br/>
+        删除后该工程会从项目清单和顶栏“监测对象”中移除（演示数据，刷新页面后恢复）。
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:18px;">
+        <button class="btn-outline" onclick="window.app.closeModal()">取消</button>
+        <button class="btn-primary" style="background:linear-gradient(135deg,#e5484d,#c93a3f);" onclick="window.portal.deleteProject('${p.id}')">确认删除</button>
+      </div>
+    `);
+  }
+
+  deleteProject(projectId) {
+    if (this.currentRole !== 'admin') {
+      this.denyAdminAction();
+      return;
+    }
+    const projects = window.SystemMockData.projects;
+    if (projects.length <= 1) {
+      window.app.closeModal();
+      window.app.toast('至少需要保留一个监测工程', 'warning');
+      return;
+    }
+    const idx = projects.findIndex((p) => p.id === projectId);
+    if (idx < 0) return;
+
+    const wasCurrent = window.dashboard && window.dashboard.currentProjectId === projectId;
+    projects.splice(idx, 1);
+    window.app.closeModal();
+
+    if (wasCurrent) {
+      const next = projects[0];
+      window.dashboard.currentProjectId = next.id;
+      window.dashboard.renderBridgeSvg();
+      window.dashboard.renderSensorPills();
+      window.dashboard.renderMonitorItems();
+      if (window.dashboard.cableChart) {
+        window.dashboard.cableChart.updateData(next.cables || []);
+      }
+    }
+
+    this.refreshProjectViews();
+    window.app.toast('工程已删除（演示数据，刷新页面后恢复）', 'success');
   }
 
   // 渲染传感器设备矩阵
@@ -144,17 +350,26 @@ class PortalController {
     `).join('');
   }
 
-  // 渲染项目管理表格
+  // 渲染项目管理表格（含角色权限操作列）
   renderProjectsTable() {
     const tbody = document.getElementById('projects-table-body');
     if (!tbody) return;
-    tbody.innerHTML = window.SystemMockData.projects.map(p => `
+    const isAdmin = this.currentRole === 'admin';
+    tbody.innerHTML = window.SystemMockData.projects.map((p) => `
       <tr>
         <td><strong>${p.name}</strong></td>
         <td>${p.type}</td>
         <td>${p.location} · ${p.span}</td>
         <td><span class="badge badge-success">${p.status}</span></td>
         <td style="font-family:monospace; font-weight:600; color:var(--color-primary);">${p.healthScore} 分</td>
+        <td>
+          ${isAdmin
+            ? `<div class="project-row-actions">
+                 <button class="btn-outline project-action-btn" onclick="window.portal.openProjectForm('${p.id}')">编辑</button>
+                 <button class="btn-outline project-action-btn project-action-danger" onclick="window.portal.confirmDeleteProject('${p.id}')">删除</button>
+               </div>`
+            : `<button class="btn-outline project-action-btn project-lock-btn" onclick="window.portal.denyAdminAction()">🔒 仅管理员</button>`}
+        </td>
       </tr>
     `).join('');
   }
