@@ -72,6 +72,69 @@
   background: var(--color-success);
 }
 
+/* 传感器台账 */
+.device-monitor-summary-bar {
+  background: #f7f9fb;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+.device-stats-counts { flex-wrap: wrap; gap: 12px 38px; }
+.device-stats-counts span { display: flex; align-items: baseline; gap: 7px; }
+.device-stats-counts span strong { font-size: 20px; margin: 0; }
+#device-online { color: #25825a; }
+#device-offline { color: #66798b; }
+.device-toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin-bottom: 17px; }
+.device-toolbar label { display: flex; flex-direction: column; gap: 6px; color: #5b6c7c; font-size: 12px; font-weight: 600; }
+.device-search { flex: 1 1 240px; }
+.device-filter { flex: 0 1 175px; }
+.device-toolbar input, .device-toolbar select {
+  width: 100%; height: 38px; padding: 0 11px; color: #26394b; background: #fff;
+  border: 1px solid #d6dfe7; border-radius: 4px; font: inherit; font-weight: 400;
+}
+.device-toolbar input:focus, .device-toolbar select:focus { outline: 2px solid #8db5ec; outline-offset: 1px; }
+.device-categories { display: flex; flex-wrap: wrap; gap: 7px; padding-bottom: 16px; border-bottom: 1px solid #e5ebf0; }
+.device-categories button {
+  display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px solid #d8e1e8;
+  border-radius: 4px; color: #4d6273; background: #fff; cursor: pointer; font-size: 12px;
+}
+.device-categories button span { color: #6d8292; font: 11px var(--font-mono); }
+.device-categories button[aria-pressed="true"] { color: #145a9c; border-color: #70a5df; background: #ebf4fc; font-weight: 600; }
+.device-categories button:hover { border-color: #70a5df; }
+.device-list-heading { display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px; color: #263b4c; font-size: 13px; }
+.device-list-heading span { color: #718596; font-size: 12px; }
+.device-grid-matrix {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; max-height: none;
+  overflow: visible; padding: 0; background: transparent; border: 0; border-radius: 0; margin: 0;
+}
+.device-grid-tag {
+  min-width: 0; min-height: 132px; padding: 13px; display: flex; flex-direction: column; align-items: stretch;
+  justify-content: flex-start; gap: 7px; text-align: left; background: #fff; border: 1px solid #dbe3e9; border-radius: 5px;
+}
+.device-grid-tag:hover { border-color: #79a7d4; background: #f5faff; box-shadow: 0 3px 10px #213e5710; }
+.device-grid-tag:focus-visible { outline: 2px solid #347dc4; outline-offset: 2px; }
+.device-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.device-type { color: #1e3749; font-size: 14px; font-weight: 650; overflow-wrap: anywhere; }
+.device-status { display: inline-flex; align-items: center; gap: 5px; color: #288256; flex: none; font-size: 11px; }
+.device-status i { width: 6px; height: 6px; border-radius: 50%; background: #41a371; }
+.device-status.is-offline { color: #a96345; }
+.device-status.is-offline i { background: #cc8062; }
+.device-tag-code { color: #52718a; font-size: 11px; }
+.device-card-bridge, .device-card-location { display: block; min-width: 0; color: #708494; font-size: 11px; line-height: 1.4; overflow-wrap: anywhere; }
+.device-card-location { color: #526d7c; }
+.device-card-reading { margin-top: auto; padding-top: 7px; border-top: 1px solid #edf1f4; color: #6a8290; font: 11px var(--font-mono); }
+.device-card-reading strong { color: #157a94; font-size: 15px; }
+.device-empty { grid-column: 1 / -1; padding: 38px; text-align: center; color: #7a8d9b; background: #f7f9fb; }
+.device-pagination { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; color: #728696; font-size: 12px; }
+.device-pagination > div { display: flex; gap: 6px; }
+.device-pagination button { padding: 6px 12px; font-size: 12px; }
+.device-pagination button:disabled { opacity: .45; cursor: not-allowed; }
+@media (max-width: 600px) {
+  .device-filter { flex: 1 1 135px; }
+  .device-grid-matrix { grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); }
+  .device-grid-tag { min-height: 125px; }
+  .device-stats-counts { gap: 8px 15px; }
+}
+
 /* 预警处理闭环流程步骤指示条 */
 .closed-loop-steps {
   display: flex;

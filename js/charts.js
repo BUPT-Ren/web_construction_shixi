@@ -37,7 +37,8 @@ class RealtimeWaveChart {
       showGrid: true,
       gridColor: 'rgba(31, 111, 235, 0.08)',
       textColor: '#6b7684',
-      initialValue: 0
+      initialValue: 0,
+      latestLabel: '实时'
     }, options);
     
     this.data = [];
@@ -74,9 +75,9 @@ class RealtimeWaveChart {
     const plotH = height - padTop - padBottom;
 
     // 绘制标题和单位
-    ctx.fillStyle = '#5b6572';
+    ctx.fillStyle = this.options.textColor;
     ctx.font = '11px sans-serif';
-    ctx.fillText(`${this.options.title} (${this.options.unit})`, padLeft, 14);
+    if (this.options.title) ctx.fillText(`${this.options.title} (${this.options.unit})`, padLeft, 14);
 
     // 计算 Y 轴范围
     let minY = this.options.minY;
@@ -100,7 +101,7 @@ class RealtimeWaveChart {
         ctx.stroke();
 
         // 刻度数值
-        const val = (maxY - (rangeY / gridRows) * i).toFixed(1);
+        const val = (maxY - (rangeY / gridRows) * i).toFixed(Math.max(Math.abs(minY), Math.abs(maxY)) < 1 ? 3 : 1);
         ctx.fillStyle = this.options.textColor;
         ctx.font = '10px monospace';
         ctx.textAlign = 'right';
@@ -198,18 +199,18 @@ class RealtimeWaveChart {
     ctx.save();
     ctx.beginPath();
     ctx.arc(lastPt.x, lastPt.y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = '#1f6feb';
+    ctx.fillStyle = this.options.lineColor;
     ctx.shadowColor = this.options.lineColor;
     ctx.shadowBlur = 6;
     ctx.fill();
     ctx.restore();
 
     // 显示最新瞬时值
-    const latestVal = this.data[this.data.length - 1].toFixed(2);
-    ctx.fillStyle = '#1f6feb';
+    const latestVal = this.data[this.data.length - 1].toFixed(Math.abs(this.data[this.data.length - 1]) < 1 ? 4 : 2);
+    ctx.fillStyle = this.options.lineColor;
     ctx.font = 'bold 12px monospace';
     ctx.textAlign = 'right';
-    ctx.fillText(`实时: ${latestVal} ${this.options.unit}`, width - padRight, 14);
+    ctx.fillText(`${this.options.latestLabel}: ${latestVal} ${this.options.unit}`, width - padRight, 14);
   }
 }
 
@@ -239,7 +240,7 @@ class CableForceComparisonChart {
     ctx.clearRect(0, 0, width, height);
 
     if (!this.items.length) {
-      ctx.fillStyle = '#929aa6';
+      ctx.fillStyle = '#9bb9d9';
       ctx.font = '13px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -255,16 +256,16 @@ class CableForceComparisonChart {
     const plotH = height - padTop - padBottom;
 
     // 图例
-    ctx.fillStyle = '#2f6fd6';
+    ctx.fillStyle = '#54c7ff';
     ctx.fillRect(width - 160, 10, 12, 8);
-    ctx.fillStyle = '#5b6572';
+    ctx.fillStyle = '#b8d4ed';
     ctx.font = '11px sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('设计索力 (kN)', width - 142, 17);
 
-    ctx.fillStyle = '#d98324';
+    ctx.fillStyle = '#f4bb4b';
     ctx.fillRect(width - 70, 10, 12, 8);
-    ctx.fillStyle = '#5b6572';
+    ctx.fillStyle = '#b8d4ed';
     ctx.fillText('实测索力 (kN)', width - 52, 17);
 
     // Y轴范围
@@ -276,7 +277,7 @@ class CableForceComparisonChart {
 
     // 绘制横向网格
     const rows = 4;
-    ctx.strokeStyle = 'rgba(31, 111, 235, 0.08)';
+    ctx.strokeStyle = 'rgba(102, 198, 255, 0.18)';
     ctx.lineWidth = 1;
     for (let i = 0; i <= rows; i++) {
       const y = padTop + (plotH / rows) * i;
@@ -286,7 +287,7 @@ class CableForceComparisonChart {
       ctx.stroke();
 
       const val = Math.round(maxVal - (maxVal / rows) * i);
-      ctx.fillStyle = '#6b7684';
+      ctx.fillStyle = '#9bb9d9';
       ctx.font = '10px monospace';
       ctx.textAlign = 'right';
       ctx.fillText(val, padLeft - 6, y + 3);
@@ -308,20 +309,20 @@ class CableForceComparisonChart {
       const yActual = padTop + plotH - hActual;
 
       // 设计柱
-      ctx.fillStyle = '#2f6fd6';
+      ctx.fillStyle = '#2b8eff';
       ctx.fillRect(x1, yDesign, barW, hDesign);
 
       // 实测柱 (带微渐变)
       const barGrad = ctx.createLinearGradient(0, yActual, 0, padTop + plotH);
-      barGrad.addColorStop(0, '#e6a23c');
-      barGrad.addColorStop(1, '#cf851f');
+      barGrad.addColorStop(0, '#64df91');
+      barGrad.addColorStop(1, '#1ea76b');
       ctx.fillStyle = barGrad;
       ctx.fillRect(x2, yActual, barW, hActual);
 
       // X 轴标签（间隔抽稀显示防止拥挤）
       if (count <= 16 || idx % Math.ceil(count / 16) === 0) {
         ctx.save();
-        ctx.fillStyle = '#929aa6';
+        ctx.fillStyle = '#9bb9d9';
         ctx.font = '9px monospace';
         ctx.textAlign = 'center';
         ctx.fillText(item.id, groupCenterX, height - 12);
@@ -330,7 +331,7 @@ class CableForceComparisonChart {
     });
 
     // 底部基线
-    ctx.strokeStyle = 'rgba(31, 111, 235, 0.3)';
+    ctx.strokeStyle = 'rgba(102, 198, 255, 0.55)';
     ctx.beginPath();
     ctx.moveTo(padLeft, padTop + plotH);
     ctx.lineTo(width - padRight, padTop + plotH);

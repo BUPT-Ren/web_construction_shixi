@@ -53,6 +53,18 @@ class PortalController {
     if (window.app && window.app.refreshBridgeDropdown) {
       window.app.refreshBridgeDropdown();
     }
+    const boardSelect = document.getElementById('board-bridge');
+    const deviceSelect = document.getElementById('device-bridge-filter');
+    const selectedBridge = window.dashboard.currentProjectId;
+    boardSelect.replaceChildren(...window.SystemMockData.projects.map(p => new Option(p.name, p.id)));
+    boardSelect.value = selectedBridge;
+    deviceSelect.replaceChildren(new Option('全部桥梁', ''), ...window.SystemMockData.projects.map(p => new Option(p.name, p.name)));
+    window.dashboard.renderBoardData();
+    window.dashboard.renderProjectSummary(window.app.getDataProject());
+    window.dataHistory.setProject(selectedBridge);
+    window.workorder.renderDeviceGrid();
+    this.renderRealtimeMonitorTable();
+    window.app.renderDataContext();
   }
 
   openProjectForm(projectId) {
@@ -80,7 +92,7 @@ class PortalController {
         <div class="project-form-row">
           <div class="project-form-field">
             <label>所在地</label>
-            <input id="pf-location" type="text" value="${isEdit ? val(p.location) : ''}" placeholder="如：河北省保定市" />
+            <input id="pf-location" type="text" value="${isEdit ? val(p.location) : ''}" placeholder="如：河北省" />
           </div>
           <div class="project-form-field">
             <label>规模</label>
@@ -133,12 +145,15 @@ class PortalController {
     if (projectId) {
       const p = window.SystemMockData.projects.find((x) => x.id === projectId);
       if (!p) return;
+      const oldName = p.name;
       Object.assign(p, {
         name, type, location, span,
         status: status || p.status,
         healthScore, healthLevel,
         description: description || p.description
       });
+      window.SystemMockData.deviceGrid.filter(d => d.bridge === oldName).forEach(d => { d.bridge = name; });
+      window.SystemMockData.workOrders.filter(o => o.bridge === oldName).forEach(o => { o.bridge = name; });
       window.app.closeModal();
       this.refreshProjectViews();
       window.app.toast('工程信息已更新', 'success');
@@ -276,7 +291,7 @@ class PortalController {
         </div>
 
         <div style="display:flex; justify-content:flex-end; margin-top:6px;">
-          <button class="btn-primary" onclick="window.app.closeModal()">确定</button>
+          <button class="btn-primary" onclick="window.app.openSensorDevices(${idx})">查看当前桥梁已安装设备</button>
         </div>
       </div>
     `);
@@ -327,7 +342,9 @@ class PortalController {
           <div class="case-data-badges">
             <span class="badge badge-success">运行状态: ${p.status}</span>
             <span class="badge badge-primary">健康指数: ${p.healthScore}分 (${p.healthLevel})</span>
-            <button class="btn-outline" style="margin-left:auto; padding:3px 10px; font-size:11px;" onclick="window.app.switchToBridge('${p.id}')">进入大屏监测</button>
+            <button class="btn-outline" onclick="window.app.openProjectData('${p.id}', 'points')">监测测点</button>
+            <button class="btn-outline" onclick="window.app.openProjectData('${p.id}', 'health')">健康评估</button>
+            <button class="btn-outline" style="margin-left:auto; padding:3px 10px; font-size:11px;" onclick="window.app.switchToBridge('${p.id}', 'dashboard')">进入大屏监测</button>
           </div>
         </div>
       </div>
@@ -338,12 +355,12 @@ class PortalController {
   renderRealtimeMonitorTable() {
     const tbody = document.getElementById('realtime-monitor-body');
     if (!tbody) return;
-    const juli = window.SystemMockData.projects.find(p => p.id === 'juli');
-    const items = (juli && juli.monitoringItems) ? juli.monitoringItems : [];
+    const project = window.app.getDataProject();
+    const items = project?.keyPoints || [];
     tbody.innerHTML = items.map(it => `
       <tr>
-        <td>${it.name}</td>
-        <td style="font-family:monospace; font-weight:600; color:var(--text-main);">${it.value}</td>
+        <td><button class="data-row-link" onclick="window.dashboard.openSensorInfo('${it.id}')">${it.id} · ${it.name} ›</button></td>
+        <td style="font-family:monospace; font-weight:600; color:var(--text-main);">${it.val}</td>
         <td>${it.unit}</td>
         <td><span class="badge badge-success">● 正常</span></td>
       </tr>
@@ -357,11 +374,11 @@ class PortalController {
     const isAdmin = this.currentRole === 'admin';
     tbody.innerHTML = window.SystemMockData.projects.map((p) => `
       <tr>
-        <td><strong>${p.name}</strong></td>
+        <td><button class="data-row-link" onclick="window.app.openProjectData('${p.id}', 'project')">${p.name} ›</button></td>
         <td>${p.type}</td>
         <td>${p.location} · ${p.span}</td>
         <td><span class="badge badge-success">${p.status}</span></td>
-        <td style="font-family:monospace; font-weight:600; color:var(--color-primary);">${p.healthScore} 分</td>
+        <td><button class="data-row-link" onclick="window.app.openProjectData('${p.id}', 'health')">${p.healthScore} 分 ›</button></td>
         <td>
           ${isAdmin
             ? `<div class="project-row-actions">

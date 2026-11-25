@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from . import models  # noqa: F401  # 确保模型注册到 Base
 from .database import Base, SessionLocal, engine
-from .routers import alarms, auth, devices, monitoring, projects, workorders
+from .routers import alarms, auth, devices, monitoring, projects, settings, workorders
 from .seed import seed
 
 app = FastAPI(title="工程结构智能监测系统 API", version="0.1.0")
@@ -24,6 +24,7 @@ app.include_router(devices.router)
 app.include_router(monitoring.router)
 app.include_router(alarms.router)
 app.include_router(workorders.router)
+app.include_router(settings.router)
 
 
 @app.on_event("startup")
