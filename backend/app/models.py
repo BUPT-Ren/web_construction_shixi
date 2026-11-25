@@ -14,6 +14,13 @@ class User(Base):
     role = Column(String, default="viewer")  # admin / engineer / viewer
 
 
+class SystemSetting(Base):
+    __tablename__ = "system_settings"
+
+    key = Column(String, primary_key=True)
+    value = Column(String, nullable=False, default="")
+
+
 class Project(Base):
     __tablename__ = "projects"
 

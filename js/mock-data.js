@@ -11,7 +11,7 @@ window.SystemMockData = {
     standard: "交通运输部 JT/T 1037-2022《公路桥梁结构监测技术规范》",
     securityLevel: "国家网络安全等级保护二级 (等保二级)",
     edgeOfflineDays: 180, // 边缘断网离线存储不少于180天
-    activeBridgesCount: 5,
+    activeBridgesCount: 2,
     totalSensorsCount: 223,
     onlineSensorsCount: 223,
     faultSensorsCount: 0
@@ -21,11 +21,11 @@ window.SystemMockData = {
   projects: [
     {
       id: "juli",
-      name: "保定巨力大桥",
+      name: "巨力大桥",
       type: "独塔斜拉桥",
-      location: "河北省保定市",
+      location: "河北省",
       span: "主跨 160m + 边跨 100m",
-      image: "assets/img/juli_project_real.jpeg",
+      image: "assets/img/bridge_hero.jpeg",
       femImage: "assets/img/juli_fem_model.jpeg",
       status: "正常服役监测中",
       healthScore: 94.6,
@@ -96,11 +96,12 @@ window.SystemMockData = {
     },
     {
       id: "lekai",
-      name: "保定乐凯大街转体斜拉桥",
+      name: "乐凯大街转体斜拉桥",
       type: "大吨位双塔转体斜拉桥",
-      location: "河北省保定市跨铁路枢纽",
+      location: "河北省铁路枢纽",
       span: "跨京广铁路等21条铁路线",
-      image: "assets/img/lekai_scale_model.jpeg",
+      image: "assets/img/juli_project_real.jpeg",
+      femImage: "assets/img/lekai_scale_model.jpeg",
       status: "数字孪生试验与在线监测",
       healthScore: 96.2,
       healthLevel: "A级 (优良)",
@@ -109,54 +110,6 @@ window.SystemMockData = {
         { id: "LK-01", name: "转体球铰受力", type: "光纤光栅应变计", val: 89.2, unit: "με", status: "normal" },
         { id: "LK-02", name: "主塔回转倾角", type: "MEMS双轴倾角仪", val: 0.008, unit: "°", status: "normal" },
         { id: "LK-03", name: "钢混结合段振动", type: "三向加速度计", val: 0.028, unit: "m/s²", status: "normal" }
-      ]
-    },
-    {
-      id: "hengzhou",
-      name: "横州大桥",
-      type: "特大跨斜拉桥施工期",
-      location: "广西横州",
-      span: "主跨 400m 级斜拉桥",
-      image: "assets/img/bridge_hero.jpeg",
-      status: "工程施工控制",
-      healthScore: 92.8,
-      healthLevel: "A级 (受控优良)",
-      description: "在斜拉桥施工控制中，实现调索、桥面板吊装拼接、全桥线形偏差实时微调与高保真有限元仿真修正。",
-      keyPoints: [
-        { id: "HZ-01", name: "主梁悬臂端位移", type: "GNSS北斗接收机", val: 14.2, unit: "mm", status: "normal" },
-        { id: "HZ-02", name: "节段拼装应力", type: "表面应变计", val: 122.0, unit: "με", status: "normal" }
-      ]
-    },
-    {
-      id: "xingtai",
-      name: "邢台金融中心超高层建筑",
-      type: "超高层地标框架-核心筒",
-      location: "河北省邢台市",
-      span: "高 180m 框架-核心筒结构",
-      image: "",
-      status: "长期健康监测",
-      healthScore: 95.1,
-      healthLevel: "A级 (稳定)",
-      description: "部署环境温湿度、顶层风载动态响应与结构水平微倾斜在线监测，应用 PCA 消除环境温度非线性影响。",
-      keyPoints: [
-        { id: "XT-01", name: "顶层风致水平摆幅", type: "超高灵敏加速度计", val: 0.015, unit: "m/s²", status: "normal" },
-        { id: "XT-02", name: "核心筒立柱微应变", type: "光纤应变传感器", val: 65.4, unit: "με", status: "normal" }
-      ]
-    },
-    {
-      id: "tangxian",
-      name: "唐县跨渠桥群",
-      type: "梁式 / 预应力连续梁桥群",
-      location: "河北省唐县 (跨南水北调中线)",
-      span: "城西桥、军营桥、唐县北桥、向阳大桥",
-      image: "",
-      status: "桥群联网集约化监控",
-      healthScore: 93.4,
-      healthLevel: "A级 (正常)",
-      description: "四座跨南水北调干渠重点桥梁实施桥群化部署，单桥标配温湿度、静力水准仪(1测点+1基点)、应变计(1/4、1/2、3/4跨)、竖向及三向加速度计与AI视频，满足全覆盖监测与集约化运维。",
-      keyPoints: [
-        { id: "TX-CX-01", name: "城西桥跨中挠度", type: "静力水准仪", val: -5.8, unit: "mm", status: "normal" },
-        { id: "TX-JY-01", name: "军营桥跨中应变", type: "光纤光栅应变计", val: 98.6, unit: "με", status: "normal" }
       ]
     }
   ],
@@ -260,7 +213,7 @@ window.SystemMockData = {
       journal: "Journal of Sound and Vibration",
       type: "国际顶级力学 SCI 一区",
       tags: ["SPSD理论", "有限元修正", "实测模态"],
-      summary: "突破传统模态参数识别对稀疏测点和弱环境激励的敏感性，直接基于加速度功率谱密度对结构物理刚度矩阵的灵敏度展开迭代反演，成功应用于保定巨力大桥实测模态修正。",
+      summary: "突破传统模态参数识别对稀疏测点和弱环境激励的敏感性，直接基于加速度功率谱密度对结构物理刚度矩阵的灵敏度展开迭代反演，成功应用于巨力大桥实测模态修正。",
       image: "assets/img/spsd_damage_result.jpeg"
     },
     {
@@ -293,7 +246,7 @@ window.SystemMockData = {
   deviceGrid: Array.from({ length: 223 }, (_, i) => {
     const n = String(i + 1).padStart(3, '0');
     const types = ['静力水准仪', '光纤应变计', 'MEMS加速度计', '超声波风速仪', '倾角仪', 'GNSS终端', '温湿度传感器', 'AI视频球机'];
-    const bridges = ['保定巨力大桥', '乐凯大街转体斜拉桥', '横州大桥', '邢台金融中心', '唐县跨渠桥群'];
+    const bridges = ['巨力大桥', '乐凯大街转体斜拉桥'];
     return {
       code: `SHM-${n}`,
       type: types[i % types.length],
@@ -309,7 +262,7 @@ window.SystemMockData = {
   workOrders: [
     {
       id: "WO-202611-008",
-      bridge: "保定巨力大桥",
+      bridge: "巨力大桥",
       sensor: "S-01 跨中静力水准仪",
       type: "主梁挠度瞬时超标预警",
       level: "三级预警 (注意)",
@@ -337,7 +290,7 @@ window.SystemMockData = {
     },
     {
       id: "WO-202611-006",
-      bridge: "保定巨力大桥",
+      bridge: "巨力大桥",
       sensor: "AI-02 高清球机",
       type: "桥面突发超限超载车辆",
       level: "一级报警 (严重)",
@@ -351,3 +304,52 @@ window.SystemMockData = {
     }
   ]
 };
+
+// 测点、设备台账编号及其在 1000 × 750 桥景中的投影位置。
+const deployments = {
+  juli: [
+    ["S-01",1,655,335],
+    ["S-02",9,304,458],
+    ["F-01",11,581,337],
+    ["C-08",13,416,346],
+    ["A-01",3,468,170],
+    ["A-03",19,526,428],
+    ["W-01",15,168,471],
+    ["G-01",21,581,156],
+    ["T-01",7,86,518,"近端引桥温度","温度计",18.6,"°C"],
+    ["T-02",23,853,277,"远端伸缩缝温度","温度计",19.1,"°C"],
+    ["F-02",25,760,310,"远侧梁端应变","光纤应变计",95,"με"],
+    ["C-09",27,641,260,"远侧斜拉索索力","索力计",768,"kN"],
+    ["D-01",29,230,457,"近端支座位移","位移计",2.4,"mm"],
+    ["A-04",35,710,339,"远侧桥墩振动","加速度计",0.019,"m/s²"],
+    ["I-01",5,499,270,"主塔倾角","倾角仪",0.012,"°"],
+    ["W-02",31,901,245,"远端引桥风速","风速仪",3.1,"m/s"]
+  ],
+  lekai: [
+    ["LK-01",2,358,481],
+    ["LK-02",6,649,182],
+    ["LK-03",10,553,371],
+    ["LK-04",14,342,249,"近端塔顶位移","GNSS终端",1.6,"mm"],
+    ["LK-05",18,245,404,"近端斜拉索应变","光纤应变计",106,"με"],
+    ["LK-06",4,102,514,"近端引桥风速","超声波风速仪",3.2,"m/s"],
+    ["LK-07",20,865,266,"远端引桥风速","超声波风速仪",2.9,"m/s"],
+    ["LK-08",22,684,365,"远端承台沉降","静力水准仪",-1.3,"mm"],
+    ["LK-09",26,475,320,"主跨斜拉索索力","索力计",623,"kN"],
+    ["LK-10",30,752,303,"远端支座位移","位移计",2.8,"mm"],
+    ["LK-11",34,425,409,"主梁跨中应变","光纤应变计",117,"με"],
+    ["LK-12",38,604,266,"远端斜拉索振动","加速度计",0.032,"m/s²"],
+    ["LK-13",42,185,487,"近端梁端位移","位移计",3.6,"mm"],
+    ["LK-14",46,336,359,"近端主塔倾角","倾角仪",0.01,"°"],
+    ["LK-15",50,810,287,"远端伸缩缝温度","温度计",20.2,"°C"],
+    ["LK-16",54,920,247,"远端桥面振动","加速度计",0.021,"m/s²"]
+  ]
+};
+for (const project of window.SystemMockData.projects) {
+  project.keyPoints = deployments[project.id].map(([id, number, x, y, name, type, val, unit]) => {
+    const point = project.keyPoints.find(item => item.id === id) || {id, name, type, val, unit, status: 'normal'};
+    const code = 'SHM-' + String(number).padStart(3, '0');
+    const device = window.SystemMockData.deviceGrid.find(item => item.code === code && item.bridge === project.name);
+    Object.assign(device, {type: point.type, point});
+    return Object.assign(point, {code, x, y});
+  });
+}

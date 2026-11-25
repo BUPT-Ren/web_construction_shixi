@@ -4,7 +4,8 @@
 
 class AppController {
   constructor() {
-    this.currentTab = 'overview'; // 默认启动进入项目总览
+    this.currentTab = 'dashboard';
+    this.modalHistory = [];
     this.clockTimer = null;
     this.bridgeDropdown = null;
   }
@@ -17,18 +18,21 @@ class AppController {
 
     // 实例化各子系统
     window.dashboard = new DashboardController();
+    window.dataHistory = new DataHistoryController();
     window.workorder = new WorkorderController();
     window.portal = new PortalController();
     window.aiChat = new AiChatController();
+    window.settings = new SettingsController();
 
     // 初始化各个子模块
     window.dashboard.init();
+    window.dataHistory.init();
     window.workorder.init();
     window.portal.init();
     window.aiChat.init();
+    window.settings.init();
 
-    // 默认展示项目总览
-    this.switchTab('overview');
+    this.switchTab('dashboard');
 
     // 监听窗口尺寸变化自适应重绘
     window.addEventListener('resize', () => {
@@ -144,13 +148,18 @@ class AppController {
     if (btn) btn.setAttribute('aria-expanded', 'false');
   }
 
-  switchToBridge(bridgeId) {
+  switchToBridge(bridgeId, targetTab = this.currentTab) {
+    if (!window.SystemMockData.projects.some(p => p.id === bridgeId)) return;
+    this.closeModal();
     this.setBridgeDropdownValue(bridgeId, window.SystemMockData.projects);
 
     window.dashboard.currentProjectId = bridgeId;
+    window.dashboard.currentViewMode = 'model';
     window.dashboard.renderBridgeSvg();
     window.dashboard.renderSensorPills();
     window.dashboard.renderMonitorItems();
+    window.dashboard.renderBoardData();
+    window.dataHistory.setProject(bridgeId);
 
     const project = window.SystemMockData.projects.find(p => p.id === bridgeId);
     const cables = (project && project.cables) ? project.cables : [];
@@ -159,12 +168,12 @@ class AppController {
     }
     const titleEl = document.getElementById('cable-chart-title');
     if (titleEl) {
-      titleEl.innerText = cables.length
-        ? `斜拉桥索力设计值与实测值对比 (全桥${cables.length}对拉索，误差 < 5%)`
-        : '斜拉索索力监测 (当前工程无斜拉索数据)';
+      titleEl.innerText = '斜拉索索力对比';
     }
 
-    this.switchTab('dashboard');
+    window.portal.renderRealtimeMonitorTable();
+    window.workorder.renderWorkOrders();
+    this.switchTab(targetTab);
   }
 
   initNavTabs() {
@@ -178,7 +187,13 @@ class AppController {
   }
 
   switchTab(tabId) {
+    if (!document.getElementById('tab-' + tabId)) return;
+    this.closeModal();
+    if (tabId !== 'dashboard' && this.exitPresentation) this.exitPresentation();
     this.currentTab = tabId;
+    this.renderDataContext();
+    if (tabId === 'data-history') requestAnimationFrame(() => window.dataHistory.renderChart());
+    if (tabId === 'settings') window.settings.render();
 
     // 更新按钮高亮
     document.querySelectorAll('.nav-tab-btn').forEach(btn => {
@@ -214,9 +229,75 @@ class AppController {
   }
 
   // 通用模态框
+  getDataProject() {
+    return window.SystemMockData.projects.find(p => p.id === window.dashboard.currentProjectId);
+  }
+
+  getModuleName() {
+    return document.querySelector(`.nav-tab-btn[data-tab="${this.currentTab}"]`)?.textContent.trim() || '数据大屏';
+  }
+
+  renderDataContext() {
+    const project = this.getDataProject();
+    if (!project) return;
+    const context = document.getElementById('data-context');
+    const related = document.getElementById('related-data');
+    if (window.workorder.gaugeChart) window.workorder.gaugeChart.score = project.healthScore;
+    const conclusion = document.getElementById('assessment-conclusion');
+    if (conclusion) conclusion.textContent = project.name + ' · ' + project.healthLevel;
+    context.hidden = related.hidden = this.currentTab === 'dashboard' || this.currentTab === 'settings';
+    context.innerHTML = `<button type="button" onclick="window.app.switchTab('dashboard')">${window.portal.escapeHtml(project.name)}</button><span>›</span><strong>${this.getModuleName()}</strong>`;
+    const groups = {
+      bridges: [['桥梁档案', 'project'], ['监测测点', 'points'], ['预警工单', 'alerts'], ['健康评估', 'health']],
+      realtime: [['当前桥梁测点', 'points'], ['设备档案', 'devices'], ['相关预警', 'alerts']],
+      'data-service': [['采集设备', 'devices'], ['采集测点', 'points']],
+      'data-history': [['采集测点', 'points'], ['设备档案', 'devices']],
+      alarm: [['当前桥梁预警', 'alerts'], ['关联监测测点', 'points']],
+      assessment: [['健康评估', 'health'], ['评估监测依据', 'points'], ['预警工单', 'alerts']],
+      projects: [['桥梁档案', 'project'], ['所属设备', 'devices'], ['健康评估', 'health']],
+      safety: [['结构健康评估', 'health'], ['预警处置记录', 'alerts'], ['现场设备', 'devices']],
+      video: [['视频设备', 'cameras'], ['预警事件', 'alerts']],
+      query: [['测点数据', 'points'], ['设备记录', 'devices'], ['预警记录', 'alerts']],
+      ai: [['当前桥梁档案', 'project'], ['监测数据', 'points'], ['关联预警', 'alerts']]
+    };
+    related.innerHTML = (groups[this.currentTab] || []).map(([name, detail]) =>
+      `<button type="button" onclick="window.app.openRelated('${detail}')"><span>${name}</span><b>查看 ›</b></button>`).join('');
+  }
+
+  openRelated(detail) {
+    const project = this.getDataProject();
+    if (detail === 'points') {
+      const points = project.keyPoints || [];
+      this.showModal('监测测点 · ' + project.name, `<div class="board-detail-list">${points.map(p => `<button onclick="window.dashboard.openSensorInfo('${p.id}')"><span>${p.id} · ${p.name}<small>${p.code} · ${p.type}</small></span><strong>${p.val} ${p.unit}</strong><b>›</b></button>`).join('') || '<p>暂无关联测点</p>'}</div>`);
+    } else if (detail === 'cameras') {
+      const devices = window.SystemMockData.deviceGrid.filter(d => d.bridge === project.name && /视频|球机|摄像/.test(d.type));
+      this.showModal('视频设备 · ' + project.name, `<div class="board-detail-list">${devices.map(d => `<button onclick="window.workorder.showDeviceDetail('${d.code}')"><span>${d.code}<small>${d.type}</small></span><strong>${d.status === 'online' ? '在线' : '离线'}</strong><b>›</b></button>`).join('') || '<p>暂无视频设备</p>'}</div>`);
+    } else {
+      window.dashboard.openBoardDetail({detail});
+    }
+  }
+
+  openProjectData(projectId, detail) {
+    if (projectId !== window.dashboard.currentProjectId) this.switchToBridge(projectId);
+    this.openRelated(detail);
+  }
+
+  openSensorDevices(index) {
+    const sensor = window.SystemMockData.sensorsList[index];
+    const category = window.workorder.deviceCategory(sensor.name);
+    const project = this.getDataProject();
+    const devices = window.SystemMockData.deviceGrid.filter(d => d.bridge === project.name && window.workorder.deviceCategory(d.type) === category);
+    this.showModal(category + ' · 已安装设备', `<div class="board-detail-list">${devices.map(d => `<button onclick="window.workorder.showDeviceDetail('${d.code}')"><span>${d.type}<small>${d.code} · ${d.point?.name || '未关联测点'}</small></span><b>查看 ›</b></button>`).join('') || '<p>当前桥梁暂无该类设备</p>'}</div>`);
+  }
+
   initModalHandlers() {
     const overlay = document.getElementById('global-modal-overlay');
     const closeBtn = document.getElementById('modal-close-btn');
+    const trail = document.createElement('nav');
+    trail.id = 'modal-trail';
+    trail.className = 'modal-trail';
+    trail.setAttribute('aria-label', '详情层级');
+    document.getElementById('modal-body-container').before(trail);
 
     if (closeBtn) closeBtn.addEventListener('click', () => this.closeModal());
     if (overlay) {
@@ -235,7 +316,12 @@ class AppController {
     const titleEl = document.getElementById('modal-title-text');
     const bodyEl = document.getElementById('modal-body-container');
     if (!overlay || !titleEl || !bodyEl) return;
-
+    // 桥梁和模块占前两层，弹窗最多保留分类及对象详情两层。
+    const entry = {title, htmlContent};
+    if (!overlay.classList.contains('active')) this.modalHistory = [];
+    if (this.modalHistory.length < 2) this.modalHistory.push(entry);
+    else this.modalHistory[1] = entry;
+    this.renderModalTrail();
     titleEl.innerText = title;
     bodyEl.innerHTML = htmlContent;
     overlay.classList.add('active');
@@ -244,6 +330,25 @@ class AppController {
   closeModal() {
     const overlay = document.getElementById('global-modal-overlay');
     if (overlay) overlay.classList.remove('active');
+    this.modalHistory = [];
+  }
+
+  renderModalTrail() {
+    const project = this.getDataProject();
+    const trail = document.getElementById('modal-trail');
+    const name = window.portal.escapeHtml(project?.name || '桥梁');
+    trail.innerHTML = `<button onclick="window.app.closeModal()">${name}</button><span>›</span><button onclick="window.app.closeModal()">${this.getModuleName()}</button>` +
+      this.modalHistory.map((entry, i) => `<span>›</span><button onclick="window.app.returnModal(${i})" ${i === this.modalHistory.length - 1 ? 'aria-current="page"' : ''}>${window.portal.escapeHtml(entry.title)}</button>`).join('') +
+      (this.modalHistory.length > 1 ? '<button class="modal-back" onclick="window.app.returnModal(0)">返回上一级</button>' : '');
+  }
+
+  returnModal(index) {
+    const entry = this.modalHistory[index];
+    if (!entry) return;
+    this.modalHistory = this.modalHistory.slice(0, index + 1);
+    document.getElementById('modal-title-text').textContent = entry.title;
+    document.getElementById('modal-body-container').innerHTML = entry.htmlContent;
+    this.renderModalTrail();
   }
 
   toast(message, type) {
@@ -260,6 +365,32 @@ class AppController {
   }
 
   toggleFullScreen() {
+    if (this.currentTab === 'dashboard') {
+      const button = document.getElementById('board-fullscreen');
+      const leave = () => {
+        document.body.classList.remove('board-presenting');
+        button.textContent = '全屏展示';
+        document.removeEventListener('keydown', escape);
+        document.removeEventListener('fullscreenchange', changed);
+      };
+      const escape = e => { if (e.key === 'Escape') leave(); };
+      const changed = () => { if (!document.fullscreenElement) leave(); };
+      if (document.body.classList.contains('board-presenting')) {
+        this.exitPresentation();
+        return;
+      }
+      document.body.classList.add('board-presenting');
+      button.textContent = '退出全屏';
+      document.addEventListener('keydown', escape);
+      document.addEventListener('fullscreenchange', changed);
+      this.exitPresentation = () => {
+        leave();
+        if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+        this.exitPresentation = null;
+      };
+      document.documentElement.requestFullscreen?.().catch(() => {});
+      return;
+    }
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch(() => {});
     } else {

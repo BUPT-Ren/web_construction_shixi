@@ -61,10 +61,28 @@ class DemoAuthController {
     }
   }
 
-  tryLogin() {
+  async tryLogin() {
     const username = (this.usernameEl.value || '').trim().toLowerCase();
     const password = this.passwordEl.value || '';
     const account = this.accounts[username];
+    try {
+      const response = await fetch('http://127.0.0.1:8000/auth/login', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({username, password})
+      });
+      if (!response.ok) {
+        this.errorEl.textContent = '账号或密码错误';
+        return;
+      }
+      const result = await response.json();
+      const identity = {username: result.username, name: result.username === 'admin' ? '管理员' : result.username === 'engineer' ? '工程师' : result.username, role: result.role, token: result.access_token};
+      sessionStorage.setItem(this.storageKey, JSON.stringify(identity));
+      this.errorEl.textContent = '';
+      this.applyIdentity(identity, true);
+      return;
+    } catch (err) {
+      // Allow the existing offline demo accounts when the API is unavailable.
+    }
 
     if (!account || account.password !== password) {
       this.errorEl.textContent = '账号或密码错误，请使用下方演示账号';
@@ -93,6 +111,7 @@ class DemoAuthController {
     if (window.portal && window.portal.applyRole) {
       window.portal.applyRole(identity.role);
     }
+    if (window.settings) window.settings.render();
     if (notify && window.app && window.app.toast) {
       window.app.toast(`欢迎回来，${identity.name}`, 'success');
     }

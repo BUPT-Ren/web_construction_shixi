@@ -3,11 +3,12 @@
 import base64
 import hashlib
 import secrets
+import os
 from datetime import datetime, timedelta, timezone
 
 import jwt
 
-SECRET_KEY = "shm-demo-secret-change-me"
+SECRET_KEY = os.environ.get("SHM_SECRET_KEY") or secrets.token_urlsafe(48)
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
