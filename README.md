@@ -97,7 +97,7 @@ python -m http.server 8080
 - **运行**：双击 `index.html`（`file://` 协议离线运行），或 `python -m http.server` 本地预览。
 - **部署**：任意静态文件托管、GitHub Pages、Nginx 等，无需构建步骤。
 - **版本管理**：Git（`main` 分支），本地提交 + GitHub 远程仓库。
-- **兼容性**：现代浏览器（Chrome / Edge / Firefox / Safari），需支持 ES6 与 CSS Grid。
+- **兼容性**：现代浏览器（Chrome / Edge / Firefox / Safari），需要支持 ES6 与 CSS Grid。
 
 ---
 
